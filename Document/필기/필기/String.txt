@@ -1,0 +1,134 @@
+등차수열
+if문 한번
+변수 2개
+
+
+
+*	1
+**	2
+***	3
+****	4
+*****	5
+******	6
+
+
+
+1층 - 별 1개 찍고 \n
+2층 - 별 2개 찍고 \n
+3층 - 별 3개 찍고 \n
+
+floor층 - 별 floor개 찍고 \n
+
+
+
+층 + 개수 = ari(targetFloor)
+
+
+================================
+
+
+
+#include <stdio.h>
+
+int main() {
+
+	// 문자열 (String) - char로 이루어진 문자 배열
+
+	//printf("\n==== 문자열 =============\n\n");
+	//char c = 'a';
+	//printf("%c(%d)\n", c, c);
+
+	//char strArr[5] = { 'H','e','l','l','o' };
+	//
+
+	//for (int i = 0; i < 5; ++i) {
+	//	printf("%c", strArr[i]);
+	//}
+	//printf("\n");
+
+	//char hello[] = { 'H','e','l','l','o','!','!','!','\0'};		// 선언과 동시에 초기화를 한다면, 배열의 크기를 지정하지 않아도 갯수만큼 알아서 만들어준다.
+	//															// 문자열이 끝났다는 것을 알려주는 '\0' 이라는 문자를 꼭 넣어줘야 한다.(Null 문자)
+	//int helloLen = sizeof(hello);					// 밖에서 helloLen 을 선언해두는것이 속도, 안정성, 가독성 모든것에서 좋다.
+
+	//for (int i = 0; i < helloLen; ++i) {			// sizeof를 이용해 배열의 크기를 받아와 그만큼 반복한다.
+	//	printf("%c", hello[i]);
+	//}
+	//printf("\n");
+
+	//int iArr[] = { 1,2,3,4,5 };
+	//int iArrLen = sizeof(iArr) / sizeof(iArr[0]);		// sizeof(int)를 나눠주면 배열의 크기를 알 수 있다.
+	//printf("iArreLen : %d\n", iArrLen);					// 그런데 iArr가 double로 바뀐다면, 다시 식을 변경해야함. 이거 대신 sizeof(iArr[0]) 을 쓰면 간단해진다.
+
+	//printf("%s\n", hello);
+
+
+	//char world[] = "World!";							// 이런식으로 선언 및 초기화를 할 수도 있다. 이런 경우, 마지막에 알아서 \0을 넣어준다.
+	//printf("world : %s (%d)\n", world, sizeof(world));			// 그래서 출력도 정상적으로 되고, size도 +1 되서 나온다.
+
+	//world[2] = 'R';										// 이렇게 내용을 바꿀 수 있는 것을 문자열변수 라고 한다.
+	//printf("world : %s\n", world);
+
+	//char* worldPtr = "World!!";							// 포인터 : 메모리의 주소값을 저장하는 변수
+	//printf("worldPtr : %s\n", worldPtr);
+	//worldPtr[2] = 'R';									// 이건 안바뀐다 => 문자열 상수라고 함.
+	//printf("worldPtr : %s\n", worldPtr);
+														// 배열과 포인터랑 매우 비슷하다 - 긴밀한 관계를 가짐.	
+														// 배열의 이름 : 배열 시작점의 주소 => 포인터
+
+
+
+	/////////////////////////////////////////////////////////
+
+	// 1. 문자열 버퍼(Buffer) 준비
+	char buf[256] = { 0, };
+
+	// 2. 문자열이 들어있는 배열 준비
+	// 2-1. Hello
+	// 2-2. ,
+	// 2-3. ' ' (Blank)
+	// 2-4. World
+	// 2-5. !
+
+	// 3. buf에 문자열 합치기
+	// 4. buf 출력
+
+	char hello[5][6] = { "Hello", ",", " ", "World", "!" };		//선언과 동시에 초기화(대입)
+	//char hello1[] = "Hello";
+	//char hello2[] = ",";
+	//char hello3[] = " ";
+	//char hello4[] = "World";
+	//char hello5[] = "!";
+	//char hello_[] = {hello1, hello2, hello3, hello4, hello5};
+
+
+	printf("버퍼 초기화 확인 : %s\n", buf);
+	printf("size of hello : %d\n", sizeof(hello));
+
+	//for (int i = 0; i < 5; ++i) {			// 잘 들어갔는지 확인
+	//	printf("%s ", hello[i]);
+	//}
+
+	printf("\n문자열 저장 끝\n\n\n");
+
+	int p = 0;
+	for (int i = 0; i < 5; ++i) {
+		for (int j = 0; j < sizeof(hello[i]); ++j) {
+			if (hello[i][j] != '\0') {
+				buf[p] = hello[i][j];
+				++p;
+			}
+		}
+	}
+		//for (int i = 0; i < 5; ++i) {
+		//	*buf = buf[0] + hello[i];			// 버퍼에 원래있던 버퍼 + hello[i]를 넣는는다.
+		//	printf("%s\n", buf);									// 그 다음바퀴 = hello[i]가 들어가있는 버퍼에 hello[i+1] 을 넣는다.
+		//}
+
+
+
+
+		printf("%s\n", buf);
+
+		return 0;
+	
+}

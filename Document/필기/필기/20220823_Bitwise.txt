@@ -1,0 +1,224 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef const unsigned char Flag;
+
+// Bit-Flag 는 리터럴상수로 만드는 것이 좋다.
+#define FULLSCREEN 2	// 이렇게 써도 되지만, 열거체를 사용하는 것이 좋다.
+#define MAXENUMSTRLEN 30
+
+// 열거체 (Enumeration)
+enum EWndOpt {
+	kClose = 1,
+	kFullscreen = 2,
+	kMin = 4,
+	kTitlebarIcon = 8,
+	kMenu = 16
+};
+
+
+int SetOption(unsigned char* _wndOpt, Flag _optNum);
+int RemoveOption(unsigned char* _wndOpt, Flag _optNum);
+int CheckOptionAndPrintCheck(unsigned char _wndOpt, Flag _optNum, char*_enumStr);
+int PrintOption(unsigned char _wndOpt);
+int ChangeDecimalToBinary(char* _pBinary, unsigned char _wndOpt);
+char* GetStringOfEnum(Flag _optNum, char* enumStr);
+
+int main() {
+
+	// 비트 단위 연산자 (Bitwise Operator)
+	// &(And)
+
+	
+	
+
+
+	//////////////////////////////////////
+	printf("\n==== Bit Flag ==================\n");
+	
+	// Bit-Flag
+	// 00000000
+	// 1. Close
+	// 2. Fullscreen
+	// 4. Min
+	// 8. TitlebarIcon
+	// 16. Menu
+
+	unsigned char wndOpt = 0;
+	
+	Flag close = 1;
+	Flag fullscreen = 2;
+	Flag min = 4;
+	Flag titlebarIcon = 8;
+	Flag menu = 16;
+
+	// 00000010 FS
+	wndOpt |= fullscreen;
+
+	// 00010010 Menu, FS
+	wndOpt |= menu;
+
+	// 확인
+	if (wndOpt & menu) {
+		printf("Window Option : Menu On\n");
+	}
+	else {
+		printf("Window Option : Menu Off\n");
+	}
+
+	// 제거
+	wndOpt ^= fullscreen;
+
+
+	//////////////////////////////////////////////
+	printf("\n==== 열거체 ==================\n");
+
+	printf("EwndOpt Size : %d byte\n", (int)sizeof(enum eWndOpt));
+	
+	wndOpt = kMenu | kClose | kMin;
+
+	
+	
+
+
+	// 비트 쉬프트 연산자 (Bit-Shift)
+	// 전체 연산중에 가장 빠르다. 대신 정수만 사용 가능
+	printf("\n==== 비트 쉬프트 연산자 ==================\n");
+	
+	printf("5 << 2 : %d\n", 5 << 2);
+	printf("5 >> 1 : %f\n", 5 >> 1);
+
+
+
+
+
+
+	//////////////////////////////////////////////
+	printf("\n==== 과제 ==================\n");
+	wndOpt = 0;
+	char* enumStr = NULL;
+	while((enumStr = (char*)malloc(sizeof(*enumStr) * MAXENUMSTRLEN)) == NULL) {
+		printf("Dynamic Allocate for enumStr is not success!\n");
+	}
+
+	SetOption(&wndOpt, kMenu|kClose);
+	CheckOptionAndPrintCheck(wndOpt, kFullscreen,enumStr);
+	RemoveOption(&wndOpt, kClose|kMenu);
+	PrintOption(wndOpt);
+
+
+	
+
+
+
+	if (enumStr == NULL) {
+		free(enumStr);
+		enumStr = NULL;
+	}
+
+	return 0;
+}//main
+
+
+int SetOption(unsigned char* _wndOpt, Flag _optNum) {
+
+	if (_wndOpt == NULL) {
+		printf("_wndOpt is NULL!\n");
+		return -1;
+	}
+	
+	*_wndOpt |= _optNum;
+	
+	return 0;
+}
+
+int RemoveOption(unsigned char* _wndOpt, Flag _optNum) {
+
+	if (_wndOpt == NULL) {
+		printf("_wndOpt is NULL!\n");
+		return -1;
+	}
+
+	*_wndOpt ^= _optNum;
+
+	return 0;
+}
+
+int CheckOptionAndPrintCheck(unsigned char _wndOpt, Flag _optNum, char* _enumStr) {
+
+	if (_wndOpt & _optNum) {
+		printf("Window Option : %s on\n",GetStringOfEnum(_optNum, _enumStr));
+		return 1;
+	}
+	else {
+		printf("Window Option : %s off\n",GetStringOfEnum(_optNum,_enumStr));
+		return 0;
+	}
+}
+
+int PrintOption(unsigned char _wndOpt) {
+
+
+	char* pBinArr = (char*)malloc(sizeof(*(pBinArr + 0)) * 8);
+
+	printf("Window Option\n");
+	ChangeDecimalToBinary(pBinArr, _wndOpt);
+
+
+	for (int i = 8 - 1; i >= 0; --i) {
+		printf("%d", *(pBinArr + i));
+	}
+
+	printf("\n");
+
+	if (pBinArr != NULL) {
+		free(pBinArr);
+		pBinArr = NULL;
+	}
+
+	return 0;
+}
+
+
+int ChangeDecimalToBinary(char* _pBinArr, unsigned char _wndOpt) {
+
+	
+	if (_pBinArr == NULL) {
+		printf("Dynamic Allocate is not success!\n");
+		return -1;
+	}
+
+	for (int i = 0; i < 8; ++i) {
+		*(_pBinArr + i) = _wndOpt % 2;
+		_wndOpt = _wndOpt >> 1;
+	}
+
+	return 0;
+}
+
+
+char* GetStringOfEnum(Flag _optNum, char* enumStr) {
+
+	switch (_optNum) {
+	case kClose: 
+		enumStr = "Close";
+		break;
+
+	case kFullscreen: 
+		enumStr = "Fullscreen";
+		break;
+
+	case kMin: 
+		enumStr = "Min";
+		break;
+
+	case kTitlebarIcon:
+		enumStr = "TitlebarIcon";
+		break;
+
+	case kMenu: 
+		enumStr = "Menu";
+		break;
+	}
+	return enumStr;
+}

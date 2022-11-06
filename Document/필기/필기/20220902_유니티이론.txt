@@ -1,0 +1,158 @@
+유클리드 기하학
+- 그 안에 데카르드 좌표계
+
+
+오일러 앵글 - 3축 자유도 회전
+
+Vertex - 3차원 오브젝트의 가장자리 정점
+Vertex 에는 (이동, X축, Y축, Z축, Scale) 5개의 행렬이 곱해진다.
+=> 이걸 Transform 이라고 함.
+
+
+(꼬마신 신고)
+x 축 회전        Y축 회전          Z축 회전
+1   0   0         C   0   S         C  -S   0
+0   C  -S	        0   1   0         S   C   0
+0   S   C        -S   0   C         0   0   1
+
+
+Vertex 는 모델의 기준점 을 기준으로 얼마나 떨어져있는지
+Local 좌표계 를 통해 계산한다.
+
+모델이 움직이면 그 기준점만 계산하면 알아서 Vertex의 위치가 정해져 있으므로,
+연산 부담이 줄어든다.
+
+오일러좌표계 - 순서대로 계산하여 좌표 구함. -> 짐벌락 가능성 있음.
+
+사원수 - X Y Z 를 한번에 돌리는 가상의 회전축을 생성
+=> 짐벌락이 생기지 않는다.
+
+Quaternion 함수 => 우리가 익숙한 오일러좌표로 넣으면 
+사원수(Quaternion) 각으로 계산해준다.
+
+Debug.Log(transform.rotation.eulerAnles) 하면 현재 오일러 값이 나온다
+이 값을 넣으면 정확하게 Quaternion 이 나온다는 보장은 없음.
+
+
+rotation 함수 : 오브젝트가 보는 방향 기준(Local 좌표계) 으로 회전한다.
+localRotation 함수 : 부모 기준으로 추가로 더 돈다
+
+
+X축 회전 : Pitch
+Y축 회전 : Yaw
+Z축 회전 : Roll
+
+과제)
+말랑카우 주변에 파리 뱅글뱅글 돌게 만들기
+이동해도 따라오게
+
+
+
+Scale
+
+스케일 업 : 각 Vertex 에 x 2 해주면 됨.  ( 무조건 로컬 기준 )
+
+Vector3.one = (1,1,1)
+
+Sx  0   0 
+0   Sy  0
+0   0   Sz
+
+웬만하면 부모의 크기를 (1,1,1) 로 하고 자식의 크기를 따로 조절하는게 계산하기 쉽다.
+
+
+
+Position 행렬 = [x, y, z, w] 4축으로 만듬
+w = 0,1 에 따라 백터인가 아닌가 표현(1이면 벡터)
+
+3차원계산을 하기 위해 차원을 하나 더 늘린다
+= 동차 좌표 (Homogeneous coordinate)
+
+
+
+
+
+객체지향 - 모든 구조, 관점을 객체 기준으로 생각
+클래스랑 상관있는거만 넣기
+
+캡슐화 : 객체를 만들고나면 외부에선 객체의 내부를 볼 수 없다.
+- 정보(변수) 를 직접 변경하면 안된다. = 높은 확률로 문제가 생김
+- 정보를 바꾸고 싶다면 기능을 이용해야 함
+
+
+외부에서 변수를 참조하고 싶을 때 : Getter / Setter
+
+외부에서 Lv이 몇인지 보고싶을 때
+
+내부에서
+private int lv = 0;
+public int GetLevel(){
+    return lv;
+}
+이렇게 만들어 두고 외부에서 GetLevel 메소드를 실행한다.
+
+
+외부에서 값을 변경하고 싶다면
+Public void SetLevel(int _lv){
+    if(_lv > 99) {
+        return;
+    }
+    lv = _lv
+}
+
+함수로 넣으면 좋은점 : 예외처리도 가능하다
+
+
+이거 두개를 합쳐서 편하게 만든거 : 프로퍼티
+public void Lv
+{
+    get { return lv; }
+    set { lv = value; }
+}
+
+
+[SerializeField] 
+직렬화. 유니티에서는 인스팩터에 뜨지만 private 라서 코드는  접근 안됨.
+
+
+
+부모자식 으로 연결되야 연결된 관절 부위처럼 같이 계산할 수 있다
+- 그래서 transform 하는거임
+ attachGo.transform.SetParent(transform);
+
+
+
+
+
+
+==========================
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class FlyMove : MonoBehaviour
+{
+    private Transform flyTr = null;
+    private float sinPos = 0f;
+    private float cosPos = 0f;
+    private int i = 0;
+    WaitForSeconds ws;
+   
+
+
+    // Update is called once per frame
+    void Update()
+    {
+        ws = new WaitForSeconds(100000f);
+
+        sinPos = Mathf.Sin(i%360 /** Mathf.Deg2Rad*/ * Time.deltaTime);
+        cosPos = Mathf.Cos(i%360 /** Mathf.Deg2Rad*/ * Time.deltaTime);
+        transform.localPosition = new Vector3(sinPos, 0f, cosPos);
+        i += 5;
+       
+
+        ws = new WaitForSeconds(100000f);
+
+    }
+
+}

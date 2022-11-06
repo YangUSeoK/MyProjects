@@ -1,0 +1,34 @@
+값에의한 전달, 참조에 의한 전달
+
+재귀함수
+
+
+
+
+StringBuilder 클래스
+
+문자열을 효율적으로 만들어주는 라이브러리
+1. 긴 문자열을 담을 수 있는 충분한 공간을 미리 확보
+2. 추가되는 문자열들로 그 공간을 차례로 채워나간다.
+3. 문자열이 완성되면 반환
+
+StringBuilder builder = new StringBuilder(4096); // 바이트
+builder.AppendLine("Hello! World!");
+builder.Append("Hi!");
+builder.Append(2002);
+
+string str = builder.Tostring();
+Console.WriteLine(str);
+
+총 용량 : builder.Capacity
+현재 길이 : builder.Length;
+길이 추가 : builder.EnsureCapacity(int size);
+
+공간이 넘치면 알아서 늘려준다. (벡터처럼 2배크기의 배열 만들고 복사)
+
+중간에 추가 : builder.Insert(6, "good");  
+글자 바꾸기 : builder.Replace('p', 'b');   모든 p를 b로 바꿔라
+	builder.Replace('p', 'b', 3, 3); 세번째 문자부터 3번째 글자 까지 중 p를 b로 바꿔라
+
+글자 제거 : builder.Remove(8, 2);  8번째부터 2자리 지워라
+초기화 : builder.Clear();  싹 다 날리기

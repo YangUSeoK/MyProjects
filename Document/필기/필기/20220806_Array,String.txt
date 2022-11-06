@@ -1,0 +1,277 @@
+오전 9:27 2022-08-16
+
+메타버스가 성공한다 라는 가정하에
+지금이 들어갈 타이밍이다
+
+필독서 50권이상
+
+C++ 제일 어려운 것 중에 하나
+
+
+배열
+특정한 자료구조가 연속적으로 이어져있음
+
+배열 초기화 할 때 원소 갯수가 많으면 Error
+적으면 상관없다 (남은거 0으로 초기화)
+
+들어갈 값이 정해져 있으면 생성과 동시에 대입하는 것이 제일 좋다.(조금 더 빠름)
+
+
+선언 과 초기화를 동시에 한다면, 선언 시 배열의 크기 생략 가능
+
+배열의 생성에 필요한 크기의 연속된 메모리를 준비하지 못한다면 -> 배열 생성을 못한다. (배열할당 적중실패)
+
+메모리 단편화를 해결하기 위해 Memory Mnt를 따로 준비해줘야함. 
+
+
+===============================
+#include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
+
+int CountLength(char[]);
+int CountBig(char[]);
+int CountSmall(char[]);
+void SwapBigAndSmall(char* );
+
+
+#define MAX_LEN 10				// 배열의 크기가 변할 때에 편하게 바꿀 수 있다.
+								// 널널하게 잡아놓고 쓸 때에 좋다. 원래 크기보다 작아지면 오류생기니까.
+
+void main() {
+
+	printf("\n ==== 배열의 선언 및 초기화 ================\n\n");
+	// 배열 (Array)
+	// 자료구조 (Data Structures)
+	// 자료형 배열명[크기(원소의 개수)];
+	// 
+	// 배열의 요소 (Elements)
+	// 정적 배열 (Static Array) - 프로그램 실행 시 크기가 정해져 있음 : 실행 전에 크기를 미리 만들어 둠
+	// 1차원 배열
+														//			     0   1   2 
+	int iArr[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };			// 선언 및 초기화	[1] [2] [3]   =>  선언 시 초기화 구문이 있으면 배열 크기 생략 가능
+	
+	// 배열명[색인(Index)]
+	iArr[0] = 11;										// 대입			[11] [ ] [ ]
+	iArr[2] = 33;										//				[11] [ ] [33]
+
+
+	// 쓰레기값 -> 방지를 위해 생성과 동시에 기화 필수
+
+	//int len = sizeof(iArr) / sizeof(int);				
+	int length = sizeof(iArr) / sizeof(iArr[0]);			// 데이터타입이 바뀌어도 작동할 수 있게 sizeof(iArr[0]) -> 첫 배열 한칸의 크기 로 나눠준다.
+
+	printf("sizeof(iArr) : %d Byte\n", sizeof(iArr));	// 배열의 크기
+	
+	printf("len : %d\n", length);							// 요소의 개수 = (배열 전채의 크기 / 한칸의 크기)
+
+
+	for (int i = 0; i < length; ++i) {
+		printf("iArr[%d] = %d\n",i, iArr[i]);
+	}
+
+	////////////////////////////////////////////////////
+	printf("\n ==== 배열의 잘못된 사용 ================\n\n");
+
+	//int length = 3;
+	//int arr[length];   // 배열의 크기는 리터럴상수(근본상수)로 해야함. 변수, const, 실수 X
+	//int arr[3];
+
+						
+	//arr[-1] = 10;		// 배열의 크기를 벗어난 Index 는 X
+	//arr[100] = 100;
+
+	//printf("arr[-1] = %d\n", arr[-1]);
+	//printf("arr[100] = %d\n", arr[100]);
+
+
+	printf("\n ==== 배열의 주소 ================\n\n");
+
+	printf("iArr : %p\n", iArr);					// 배열의 첫번째 요소의 주소 = 배열명에 저장된 값
+	printf("&iArr[0] : %p\n", &iArr[0]);			// 배열명 = 배열의 첫번째 요소의 주소값
+													// 포인터 = 메모리의 주소값을 저장하고 있는 변수
+													// 배열명 => 포인터
+
+	// 포인터 (Pointer)
+	printf("iArr : %p\n", iArr);					// 메모리의 연산 : 메모리주소값에 +1 을 하면 자료형의 크기만큼 계산해준다.
+	printf("iArr + 1 : %p\n", iArr + 1);			// iArr + 5 = iArr[5] 의 주소값이 되는 셈.
+
+
+	for (int i = 0; i < length; ++i) {
+		printf("&iArr[%d] : %p\n", i, &iArr[i]);	// 첫칸의 주소 + 데이터타입의 크기 = 다음칸의 주소 
+	}												// 데이터가 연속적으로 이어져있다. 
+													// 어느 요소에 접근하든 속도가 동일하다 -> 속도가 가장 빠르다.
+
+													
+
+	printf("\n ==== 문자열 ================\n\n");
+
+	// 'a' : 문자(Character)
+	// "asdf" : 문자열(String) - 문자의 배열
+
+	char hello[] = "Hello, World!\n";
+	printf("hello : %s\n", hello);					// %s : 문자열 출력 포맷 -> '\0'(Null문자)을 만날 때 까지 %c를 반복적으로 출력
+	hello[0] = 'J';									// 문자열 변수
+	printf("hello : %s\n", hello);					
+	
+	int helloLen = sizeof(hello) / sizeof(hello[0]);
+	for (int i = 0; i < helloLen; ++i) {
+		printf("%c", hello[i]);						// %c : 문자 출력 포맷
+	}
+	printf("sizeof(hello) : %d Byte\n", sizeof(hello));	// 맨 마지막에 널문자 \0 포함.
+
+	printf("\n ==== 문자열 예제 - random ================\n\n");
+
+	char* name[] = { 
+		"김도진" ,"김동우", "김성화", "김준우", "김태연",
+		"박현우", "사우진", "손우상", "양우석", "오수빈",
+		"이상목", "이상인", "이상욱", "이재현", "전혜원",
+		"최회동", "한동인"
+	};
+	//printf("%s\n",name);
+
+	srand((unsigned int)time(NULL));
+	int num = rand() % 17;
+	
+	printf("반장 당첨 : %s\n", name[num]);
+
+	///////////////////////////////////////////////////////
+
+	printf("\n ==== 문자열 예제 - 과제 ================\n\n");
+
+	// 1. 문자열 준비(영어)
+	// 2. sizeof 를 사용하지 않고 문자열의 길이를 구하기
+	// 3. 대문자의 개수
+	// 4. 소문자의 개수
+	// 5. 대소문자를 변환
+
+
+
+	char str[] = "Hello World";
+	//int len = 0, bigCount = 0, smallCount = 0;
+
+	//for (int i = 0; ; ++i) {
+
+	//	if (str[i] == '\0') {
+	//		++len;
+	//		break;
+	//	}
+	//	else if (str[i] != '\0') {
+	//		++len;
+	//	}
+	//	else {
+	//		printf("오류발생\n");
+	//		break;
+	//	}
+	//}
+	//
+
+	//for (int i = 0; ; ++i) {
+	//	if (str[i] == '\0') {
+	//		break;
+	//	}
+	//	else if (str[i] != '\0') {
+	//		if (str[i] >= 65 && str[i] <= 90) {
+	//			++bigCount;
+	//			str[i] += 32;
+	//		}
+	//		else if (str[i] >= 97 && str[i] <= 122) {
+	//			++smallCount;
+	//			str[i] -= 32;
+	//		}
+	//	}
+	//	else {
+	//		printf("오류 발생\n");
+	//		break;
+	//	}
+	//}
+
+
+	printf("문자열 길이 : %d\n", CountLength(str));
+	printf("대문자 개수 : %d\n", CountBig(str));
+	printf("소문자 개수 : %d\n", CountSmall(str));
+	SwapBigAndSmall(str);
+	printf("변환 후 : %s\n",str);
+
+} //main
+
+int CountLength(char str[]) {
+	int len = 0;
+	for (int i = 0; ; ++i) {
+		if (str[i] == '\0') {
+			++len;
+			return len;
+			//break;
+		}
+		else if (str[i] != '\0') {
+			++len;
+		}
+		else {
+			printf("Null isn't contact.\n");
+			return -1;
+			//break;
+		}
+	}
+} // CountLength
+
+int CountBig(char str[]) {
+	int bigCount = 0;
+	for (int i = 0; ; ++i) {
+		if (str[i] == '\0') {
+			return bigCount;
+			//break;
+		}
+		else if (str[i] != '\0') {
+			if (str[i] >= 65 && str[i] <= 90) {
+				++bigCount;
+			}
+		}
+		else {
+			printf("Null isn't contact.\n");
+			return -1;
+			//break;
+		}
+	}
+} // CountBig
+
+int CountSmall(char str[]) {
+	int smallCount = 0;
+	for (int i = 0; ; ++i) {
+		if (str[i] == '\0') {
+			return smallCount;
+			//break;
+		}
+		else if (str[i] != '\0') {
+			if (str[i] >= 97 && str[i] <= 122) {
+				++smallCount;
+			}
+		}
+		else {
+			printf("Null isn't contact.\n");
+			return -1;
+			//break;
+		}
+	}
+} // CountSmall
+
+void SwapBigAndSmall(char* _str) {
+	for (int i = 0; ; ++i) {
+		if (_str[i] == '\0') {
+			break;
+		}
+		else if (_str[i] != '\0') {
+			if(_str[i] >= 65 && _str[i] <= 90) {
+				_str[i] += 32;
+			}
+			else if (_str[i] >= 97 && _str[i] <= 122) {
+				_str[i] -= 32;
+			}
+		}
+	}
+
+} // SwapBigAndSmall
+
+
+
+
+=================================

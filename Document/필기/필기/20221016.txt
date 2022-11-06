@@ -1,0 +1,89 @@
+오전 1:39 2022-10-17 월요일
+
+해야 할 것들
+멤버변수 중 private 이름앞에 m 붙이기
+프로퍼티로 설정하기
+쉐이더 설정
+
+
+
+각 버튼에 담당 목적지 건물 세팅하기
+1. UI매니저와 목적지매니저를 이용해 목적지 이름과 버튼이름이 일치하는 경우 세팅
+2. 그냥 인스팩터에 넣어주기
+2번도 나쁘지않아보임.
+
+
+Builldings -> Builldings Manager 추가
+각 건물들에 Buillding 스크립트 추가
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Building : MonoBehaviour
+{
+    private Vector3 moriScale = Vector3.zero;
+    private bool misUpscale = false;
+
+    public void UpScale()
+    {
+        if (!misUpscale)
+        {
+            misUpscale = true;
+            moriScale = transform.localScale;
+            transform.localScale = transform.localScale + new Vector3(0.5f, 0.5f, 0.5f);
+        }
+    }
+
+    public void SetOriScale()
+    {
+        if (misUpscale)
+        {
+            transform.localScale = moriScale;
+            misUpscale = false;
+        }
+    }
+}
+
+
+
+
+
+가이드봇
+Start 에 있는 SetFlag -> 시작점, 끝점으로 넣어서 시작X
+
+네비 목적지 버튼 누른 후 확인 버튼 누르면 온클릭리스너에
+가이드봇.SetFlagList(PathFinder.PathFinding(PathFinder.FindNearFlag(GuideBot), FindNearFlag(목적지 건물 오브젝트)) 실행
+인자 넘길 때 람다식 사용
+넘길 인자 : 목적지 게임오브젝트
+
+
+
+
+델리게이트 설정해야 할 것들
+
+가이드봇
+SetFlagList(가이드봇 자기자신, 목적지) 
+{
+    flagList = setFlagListDelegate?.Invoke(GuideBot, Destination);
+}
+
+-> 게임매니저
+SetFlagListCallback(가이드봇,목적지) 
+{
+    -> 패스파인더 PathFinding(FindNearFlag(GuideBot), FindNearFlag(Destination));
+}
+
+
+시작 -> 가이드봇의 Activate(); 실행
+
+
+
+경유지 추가 :
+일단 다음플래그, 원래 목적지 저장 후 가이드봇 스탑
+경유지를 목적지로 설정하여 출발
+도착했으면 원래 목적지를 설정하여 출발
+
+목적지 수정
+일단 다음플래그 저장 후 가이드봇 스탑
+목적지를 재 설정하여 출발

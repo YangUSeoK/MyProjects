@@ -1,0 +1,185 @@
+오전 9:41 2022-08-24
+
+유니티 생명주기 - script 하나마다 생명주기를 지닌다.
+스크립트 끼리 생명주기가 동시에 움직이지만 속도가 차이가 나서 오류가 생길 수 있다
+(A 스크립트의 start나 update 에서 B 스크립트의 start를 참조하는 경우, B는 아직 Awake에 있으면 오류가 생긴다.
+
+
+Reset - Awake = OnEnable - Start - {
+     (FixedUpdate - OnTriggerXXX - OnCollisionXXX) - (Update - LateUpdate) 
+} -OnDisable - OnDestroy - OnApplicationQuit
+
+// 라이프사이클에 있는 함수들은 모두 콜백 메소드임
+//콜백 메소드 : 자동으로 호출되는 메소드(start, update 등)
+
+FixedUpdate : 물리엔진 관리 (힘을 주는걸 먼저 계산한 후에 Update에서 작동)
+Update : 대부분
+LateUpdate : 카메라 업데이트 (추적대상이 움직이고 나면 그 이후에 동작한다)
+
+
+
+ Awake : 게임을 켜면 한번만 실행. Start는 OnEnalbe 뒤에 있어서 다시 돌아올 수도 있다.
+
+
+
+접근지시자
+public : 다른 외부 클래스에서 접근 가능
+private : 클래스 내부에서만 접근가능. 외부 클래스에서 접근 불가능
+protected : 상속관계인 클래스 사이에서는 public. 그 외에는 private
+
+
+
+Edit - project settings - Input Manager - Axes 옆에 삼각형
+
+마우스 감도 조절 - Mouse X - Sensitivity 조절
+
+
+
+Time.deltaTime : 프레임의 역수. 이걸 곱해주면 1초에 1번 작동되는 것 처럼 된다.
+ 	          컴퓨터 성능에 따라 프레임이 달라져도 동일하게 작동하기 위함
+
+Time.Scale : 속도에 배수를 곱해준다.(기준시간을 변경)
+	    0이되면 일시정지. 권장 최대 4
+
+
+
+============================
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+
+// 파일명과 class명은 무조건 같아야 한다.
+public class PlayerCtrl : MonoBehaviour     
+{
+  
+    //접근지시자 : 보안상, 협업상의 이유
+    //public : 다른 외부 클래스에서 접근 가능
+    //private : 클래스 내부에서만 접근가능.외부 클래스에서 접근 불가능.
+    //          변수 선언때 지정 안하면 private 임
+    //protected : 상속관계인 클래스 사이에서는 public. 그 외에는 private
+
+
+    private float h = 0f; // 실수 구분을 위해 f를 붙임 : 0.0 이라는 뜻
+    private float v = 0f;
+    private float r = 0f;
+    float u = 0f;
+    // horizon, vertical
+
+
+
+    // Start is called before the first frame update
+    // 게임 시작할 때 한번만 작동
+    // Call Back Method : 자동으로 호출되는 메소드 (라이프사이클에 있는 함수들)
+
+    
+    Transform tr; // 트랜스폼 컴포넌트를 사용하기 위한 객체 선언
+
+    public float moveSpeed = 10f; // 이동속도
+    public float rotSpeed = 250f;
+    public float upSpeed = 250f;
+     // public으로 선언하면 Inspector에서 바로 값 변경이 가능하다.
+     // 주의할 점 : 내부에 작성된 값보다 Inspector 에서 설정한 값이 우선순위 높음
+
+    void Start()
+    {
+        // 트랜스폼 변수 tr에 게임 오브젝트가 지니고 있는 컴포넌트를 사용할 수 있도록 할당
+        // 반드시 게임오브젝트에 컴포넌트가 존재해야 한다.(없으면 NULL 뜸)
+        // 변수와 동일한 컴포넌트(28번줄)를 < > 안에 할당해야 함.
+        tr = GetComponent<Transform>();
+       
+
+        
+    }
+
+    // Update is called once per frame
+    // 게임이 실행되면 매 프레임마다 반복 -> 게임이 종료될 때 까지
+
+    void Update()
+    {
+        h = Input.GetAxisRaw("Horizontal");
+        v = Input.GetAxisRaw("Vertical");
+        r = Input.GetAxisRaw("Mouse X"); // 마우스 좌우 값 받아옴
+        u = Input.GetAxisRaw("Mouse Y");
+
+        // Vector 123 : 기준벡터(길이가 1이고 방향만 존재)
+        Vector3 movDir = (Vector3.forward * v) + (Vector3.right * h);
+
+        
+        // Translate(벡터밗, 셀프유무) 를 통해서 오브젝트를 이동시키는 함수
+        // .normalized : 벡터 정규화 함수. 대각선 이동시 발생하는 이동속도 증가를 균일하게 해줌.
+        // 위에 39번줄 변수 tr 선언 안해도 오류는 안난다. 런타임에러 뜨니까 주의.
+        tr.Translate(movDir.normalized * moveSpeed * Time.deltaTime, Space.Self);
+
+        //Vector3.up(Y) 축을 기준으로 회전
+        tr.Rotate(Vector3.up * rotSpeed * Time.deltaTime * r);
+
+        //tr.Rotate(Vector3.right * upSpeed * Time.deltaTime * u);
+
+        
+
+
+
+        // 콘솔창에 디버그하기 위하여 매 프레임마다 로그 확인
+        //print("h = " + h + ", v  = " + v);
+
+        //print(Vector3.Magnitude(Vector3.forward));                  // 전방 기준벡터값 확인
+        //print(Vector3.Magnitude(Vector3.forward + Vector3.right));  // 벡터값 확인
+        //print(Vector3.Magnitude((Vector3.forward + Vector3.right).normalized)); // 정규화 확인
+        //print(Vector3.Magnitude((movDir * moveSpeed * Time.deltaTime).normalized));
+
+
+
+    }
+}
+
+
+
+============================================
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class FollowCam : MonoBehaviour
+{
+    public Transform target;            // 카메라가 추적할 대상
+    public float moveDamping = 15f;     // 이동 속도 계수
+    public float rotateDamping = 10f;   // 회전 속도 계수
+    public float distance = 5f;         // 추적대상과의 거리
+    public float height = 4f;           // 추적대상과의 높이
+    public float targetOffset = 2f;     // 추적 좌표의 오프셋
+
+
+    Transform tr;   // 카메라 트랜스폼 컴포넌트 사용 변수
+
+
+    void Start()
+    {
+        tr = GetComponent<Transform>();    
+    }
+
+   // 메소드 이름 색깔 확인 (콜백메소드가 아니면 자동호출이 안된다) 
+    void LateUpdate()
+    {
+        // var : 가변자료형. 변수의 유연성을 위해서 사용되기도 함
+        var camPos = target.position - (target.forward * distance) + (target.up * height);
+        //      카메라 위치  = 내 캐릭터 위치   -      distance 만큼 뒤로      +    height 만큼 위로
+
+
+        // Slerp : 구면선형보간 -> 댐핑값이 커질수록 민감해짐.
+        // Lerp  : 선형보간 -> 댐핑값이 커질수록 둔감해짐.
+        // 보간함수 사용 이융 : 즉각적인 반응보다 부드럽게 처리하기 위함.
+
+        tr.position = Vector3.Slerp(tr.position, camPos, Time.deltaTime * moveDamping);
+        //                           //카메라위치  카메라가 이동할위치
+
+
+        // 유니티는 숨겨진 w축 까지 4축 세상이다.(짐벌락 방지) -> Quaternion
+        tr.rotation = Quaternion.Slerp(tr.rotation, target.rotation, Time.deltaTime * rotateDamping);
+
+
+        // LookAt : 대상의 위치(피봇기준)를 보도록 회전
+        tr.LookAt(target.position + (target.up * targetOffset));
+
+    }
+}

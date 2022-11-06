@@ -1,0 +1,52 @@
+컬렉션
+
+배열이랑 비슷
+동일한 형의 여러 자료를 저장하는 공간
+List도 컬렉션의 일부
+Container 라고도 부른다.
+
+배열과 차이점
+요소의 수를 바꿀 수 있다.
+유용한 함수를 기본제공
+
+컬렉션 결정 시 고려사항
+1. 색인(Index) 의 종류 : 정형화된 상태 or 임의의 key 값
+
+2. 데이터 접근 패턴
+  - 처음부터 끝까지 데이터를 순회할 것인가?
+  - 컬렉션 중간에 데이터를 자주 넣고 빼는가?
+
+종류
+List, Dictionary, HashSet, Stack, Queue, LinkedList 등등
+멀티쓰레드 환경에서 사용하는 컬렉션들도 있다.
+
+List<int> list = new List<int>(3)  
+생성자에 들어가는 숫자 : 자료형 몇개를 넣을지
+
+list.AddRange(배열명, 리스트명) 
+배열, 다른 리스트 전체를 리스트에 추가
+
+list.IndexOf( )
+그 요소가 리스트의 몇번째 인덱스인지 반환 (없으면 -1)
+제일 처음만난놈만 반환
+
+list.LastIndexOf()
+그 요소중에 제일 마지막놈 인덱스 반환
+
+list.Insert(2, 10); 
+2번째 인덱스에 10을 넣는다. 자리 있으면 당연히 한칸 밀림
+
+
+
+Dictionary - 딕셔너리
+List와의 차이점 : 색인이 임의의 데이터 형(Key 값)
+실제로 저장되는 값 : value
+
+key 로 검색하면 value 가 나온다.
+students.ContainsKey( ) : key 값 검색
+students.ContainsValue ( ) : value 값 검색
+students.Remove( key ) : key로 검색해서 지운다.
+students.TryGetValue(key, out value); key 로 검색해서 성공하면 value를 out으로 반환. 아니면 false 반환
+
+students[key] = value;
+이렇게도 접근할 수 있다. 만약 key가 없는 상태였다면, 새 키와 value를 새로운 원소로 추가한다.

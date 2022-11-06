@@ -1,0 +1,124 @@
+오전 9:55 2022-09-07
+
+프로젝트에서 스크립트 우클릭 -> Find References In Scene
+그 스크립트를어디서 사용중인지 확인 가능
+
+
+드럼통 폭팔하면 카메라 흔들기
+
+
+Shake 스크립트
+ 
+
+
+ShakeCamera 코루틴 : 외부에서 호출하기 위해 public으로 정의
+C#은 매개변수에 디폴트값 설정 가능
+매개변수를 넘겨받으면 그냥 그값으로 동작, 매개변수가 없다면 디폴트값으로 동작
+
+Shake 스크립트 다 만든 후에
+Stages 폴더 아래 CreatEmpty -> CameraRig 
+이 안에 MainCamera 를 넣음
+
+흔들고 나서 다시 원상복구를 위해 컴포넌트 조정
+MainCamera 의 FollowCam 제거
+CameraRig 에 FollowCam, Shake 추가
+CameraRig의 Shake 스크립트에 MainCamera 오브젝트 넣기
+
+공격할 때 shakeCamera 코루틴 호출해야 하니까 FireCtrl에 추가
+객체 선언 - start에서 GameObject.Find 해서 찾기
+Fire 함수에서 코루틴 호출
+
+드럼통 터질때도 호출 BarrelCtrl에도 추가
+객체 선언 - start에서 GameObject.Find 해서 찾기
+ExpBarrel 함수에서 코루틴 호출
+
+
+
+
+
+============================
+플레이어 피격효과
+Player 에 capsule 콜라이더 추가
+(0,1,0)   Radius 0.3   	Height 2
+
+프리팹스 - E_Bullet 
+Sphere Collider - Is Trigger 체크
+
+Damaged 스크립트 작성
+
+
+Enemy 오브젝트 - 태그 추가 - ENEMY 
+-> Enemy 태그 ENEMY로 설정
+
+Enemy를 Prefabs 으로 만듬. (Origin Prefabs 선택)
+Enemy 여러마리를 생성 -> 
+플레이해보면 같은속도, 같은 반응속도로 같은루트따라 정찰함
+
+Enemy 프리팹 - EnemyAnim 더블클릭
+Parameter 두개 추가
+float Offset / float WalkSpeed
+
+레이어 - BasedLayer 
+Walk & Run 블랜드트리 클릭 - 인스팩터
+    Multiplier 파라미터 체크 - WalkSpeed
+      => 전체적인 동작속도 
+    Cycle Offset 체크 - Offset
+      => 동작의 진행과정 사이 속도
+
+
+EnemyAI 스크립트 
+hash 추가, 
+Awake() 안에 SetFloat(hash) 추가 두개
+
+
+MoveAgent 스크립트
+Strat() 안에 if 안에 
+wayPoints.RemoveAt 밑에
+    // 다음 순찰지역 랜덤위치로 변경
+            nextIdx = Random.Range(0, wayPoints.Count);
+
+if 문 아래 MoveWayPoint 주석처리
+PATROLLING = true 추가
+
+Update() 구문에 nextIdx 한칸씩 올라가던 구문 주석처리
+nextIdx = Random.Range(0, wayPoints.Count); 로 변경
+
+
+
+
+유니티에서 호출하는 여러가지 방법
+
+메소드
+코루틴
+인보크
+이벤트 : 델리케이트 사용해서 어렵다.(중급 이상)
+샌드메세지
+
+
+=================================
+
+코루틴함수에서 return 받을 수 있는 것들
+return new WaitForSeconds
+return new WaitForSecondsRealtime
+return new WaitForFixedUpdate
+     fixedUpdate 가 실행될 때 까지 기다린다.
+
+return new WaitForEndOfFrame
+    1프레임이 끝날 때 까지 기다린다.
+    Update(), LateUpdate() 가 모두 끝난 후 화면에 1프레임의 
+    렌더링이 끝난 이후에 호출
+
+return null : 지연값을 추가하지 않는다. Coroutine은 기본적으로 유니티 생명주기가 Update()구문 다음에 위치하므로, 다음 Update() 가 실행될 때 까지 기다린다 라는 의미.
+
+WaitUntil( 조건식 )
+    조건식이 거짓이면 그 자리에서 멈춰있다가, 조건식이 true가 
+    되면 이후를 실행한다. 조건식은 람다 표기법이 사용됨.
+
+WaitWhile( 조건식 )
+     Until 이랑 같음. 대신 조건식이 false 가 될 때 까지 기다림.
+
+StartCoroutine( );
+    코루틴 내에서 또다른 코루틴 호출 가능. 그 코루틴이 끝날 때
+    까지 기다린다.
+
+

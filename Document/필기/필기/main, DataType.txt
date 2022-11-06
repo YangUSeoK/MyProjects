@@ -1,0 +1,153 @@
+오전 9:52 2022-08-09
+
+cmd = command
+console
+
+
+클릭하고 f1 하면 사전나옴
+
+
+printf("") = 문자열
+문자열 배열도 인자로 받을 수 있음.
+
+char str[] = "Hello, World!"
+printf(str);
+가능
+
+
+어차피 저장은 1010111100010101 로 되어있음.
+이걸 어떻게 읽어오느냐(포맷)에 따라 결과가 다르게 출력된다.
+
+
+
+부호비트법 - 계산 안맞음, 0이 중복됨
+
+1의보수법 - 계산 안맞는경우 있음, 0이 중복됨
+	   한번 연산을 더 거쳐야 함
+
+2의보수법 - 계산 맞음, 0 중복 안됨
+	   두번 연산을 더 거쳐야 함
+
+=====================
+// 주석(Comments) 
+// 한 줄만 주석처리 됨
+
+/*
+여러
+줄
+전부
+주석
+처리
+됨
+*/
+
+
+// Source Code > Coding > Program
+#include <stdio.h>
+// C언어 : 절차지향 언어. 위에서부터 한 줄씩 순서대로 처리한다.
+// # : 전처리기(Pre-Process). 코드를 컴파일 하기 전에 먼저 처리하라는 의미. 최상단
+// include : 포함시키다.
+// <~~.h> 경로(C가 설치되어 있는 곳이 기본경로. "" 는 주소 지정가능)
+// 라이브러리(Library) : 많이 쓰이는 함수를 담고 있음.
+// stdio.h : Standard Input/Output : 입출력에 대한 기본적인 함수를 가지고 있는 헤더파일(.h 확장자)
+
+
+
+
+
+// main 함수(Function) : Entry-Point : 컴파일러가 전처리기(#)를 지나 시작하는 첫 위치
+// 함수 구조 : 반환형 함수명(인자) { 함수 내용 }
+//            Return-Type  Function-Name()
+int main() {
+// int : 자료형(Data-Type). 함수의 결과값이 어떤 형태로 나오는지를 알려주는 반환형 으로 사용되었음. Integer(정수) 로 반환한다.
+	
+	char str[] = "이거 문자열 받는거라서 배열도 됨\n";
+
+	// 함수 호출(Function Call)
+	printf("Hello, World!\n");		// () 가 들어가있으면 함수임. 
+									// printf : Print Format.  ()의 내용을 특정한 포맷으로 출력하겠다. 
+									// >> stdio.h 라는 라이브러리(헤더파일) 에 저장되어있는 함수. 운영체제와 연동하여 연결되있는 모니터에 내용을 출력(표준 출력 스트림)
+									// "" : 문자열(String). 문자열 배열도 인자로 받을 수 있다.
+									// ; 까지를 한줄로 인식함.
+
+	printf(str);
+
+
+	// 예약어(KeyWord) : 이미 만들어져 있는 특정한 단어,기능
+	return 0;	// 0(반환값, Return Vallue)을 반환하고 함수를 종료한다. 
+				// 함수가 맨처음에 int main() 으로 시작했기 때문에, int(정수)로 반환된다.
+				// Error-Code : 반환값을 0 : 정상   -1 : 문제 로 받아서 정상적으로 작동되고 종료됬는지, 오류로 종료됬는지를 알 수 있게 한다.
+
+} // main 함수의 끝이라는 의미로 주석처리를 다는 경우도 있음. 코드가 길어질수록 유용
+
+
+==================================================================================================
+
+#include <stdio.h>
+
+void main() {
+	// 자료형(DataType)
+	// 변수(Variables) : 값을 바꿀 수 있는 저장공간(메모리 여유공간에 프로그램이 사용할 공간을 마련)
+
+	// 변수 선언(Variable Declaration) 및 초기화
+	int i = 123;	// int형식의 변수를 선언. 변수의 이름은 i. 123이라는 값으로 초기화
+					// int : 정수(Integer)
+					// i : 변수명(Variable Name)
+					// = : 우변의 값을 좌변(변수 공간)에 대입한다.
+
+	i = 50;
+
+	printf("i : %d (%p)\n", i, &i); // % : 포맷. %d %p > 그 형식(포맷)에 따라 읽는다. > "", 뒤에 있는 무언가를(이 경우에는 변수 i)
+									// %d : 10진수(Decimal)   %p : 변수i의 주소(16진수)
+									// &변수 : 변수의 주소를 반환
+
+	// 단위(Unit)
+	// Bit : 0, 1(False, True), 2진법(Binary)
+	// 8Bit > 1Byte
+
+
+	// int : 계산의 기본단위. 잦은 계산이 필요할 때는 int를 쓰는게 기본
+	printf("i Size : %d Byte\n", sizeof(i));
+	printf("int Size : %d Byte\n", sizeof(int));
+	printf("\n");
+
+	// 문자(Character)
+	// ASCII Code / Table
+	char c = 'a';
+	printf("c : %c (%d Byte)\n", c,sizeof(c));
+	printf("10진수로 읽으면 c : %d\n", c);
+	printf("97을 c로 읽으면 : %c\n", 97);.
+
+
+
+	printf("\n");
+
+	// short int
+	short s = 12;
+	printf("s : %hd (%d Byte)\n", s, sizeof(s));		// %hi, hd = half int, half decimal
+
+
+	// long int
+	long l = 12345;
+	printf("l : %li (%d Byte)\n", l, sizeof(l));		// %li = long int
+
+	// long long int
+	long long ll = 12345;
+	printf("ll : %lli (%d Byte)\n", ll, sizeof(ll));	// %lli = long long int
+	printf("\n");
+	
+
+
+	// 양수, 음수
+	i = -10;							// 음수 저장 당연히 됨.
+	printf("i : %d\n", i); 
+
+//	printf("둘다 255 대입\n");
+	unsigned char unsignedChar = 255;	// 부호가 없음(양수만 저장)	> 부호계산 안하니까 속도가 더 빠름
+	signed char signedChar = 255;		// 부호가 있음 : Default > 생략 가능
+	printf("unsignedChar : %u\n", unsignedChar);	// 부호가 있냐 없냐에 따라 담을 수 있는 숫자의 범위가 달라짐 > 결과값이 크게 변할 수도 있다.
+	printf("signedChar : %u\n", signedChar);
+	
+
+
+}	// main

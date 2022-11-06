@@ -1,0 +1,47 @@
+#include <stdio.h>
+
+void BubbleSort(int* str,int len);				// 버블소트 함수
+void Swap(int* a, int* b);						// 스왑 함수
+
+void main() {
+
+	printf(" ==== BubbleSort 예제 =================\n\n");
+
+	int str[] = { 5, 2, 6, 3, 7, 9, 1, 15, 11, 13, 10, 12, 14 };		// 무작위로 배열 선언
+	int len = sizeof(str) / sizeof(str[0]);								// 배열의 길이를 저장하는 변수 len
+
+	for (int i = 0; i < len; ++i) {			// 배열이 제대로 저장되었는지 확인
+	printf("[%d]", str[i]);
+	}
+	printf("\n\n");
+
+	BubbleSort(str,len);					// 버블소트 함수 호출
+
+	for (int i = 0; i < len; ++i) {			// 배열이 정렬되었는지 확인
+		printf("[%d]", str[i]);
+	}
+	printf("\n");
+
+}//main
+
+// 버블소트 함수
+void BubbleSort(int* str, int len) {		// 버블소트는 1회전이 끝나면 제일 큰 숫자가 오른쪽으로 가고, 이후 그 앞자리까지만 비교
+
+	for (int i = len -1 ; i > 0 ; --i) {	// i번째 자리까지만 비교 를 위해 i를 len-1 ~ 1 까지로 범위 설정
+		for (int j = 0; j < i; ++j) {		// j는 0부터 i까지.(실제 Index)
+			if (str[j] > str[j + 1]) {		// str[j]와 한칸 옆의 값을 비교하여 str[j]가 크면 Swap
+				Swap(&str[j], &str[j + 1]);
+			}
+		}
+	}
+	return;
+}
+
+// Swap 함수
+void Swap(int *a, int *b) {
+	int temp = 0;
+	temp = *b;
+	*b = *a;
+	*a = temp;
+	return;
+}

@@ -1,0 +1,122 @@
+오전 9:37 2022-08-25
+
+=========어제 복습==============================
+
+Follow Cam 만들 때
+class 안에 전역변수로 private Transform target 생성
+
+이놈은 필드에 target, 즉 카메라가 있을 때는 문제없이 작동하는데, 필드에 카메라가 없다가 생길 때에는 target을 찾지 못해 NULL 값을 받아 오류가 생긴다.
+
+그래서 Start() 함수가 실행될 때 
+target = GameObject.Find("객체이름").tarnsform; 을 걸어줌
+
+시작할 때 마다 타겟은 이놈이다 하고 설정해주는것.
+
+target 은 자료형이 Transform 
+GameObject.FInd 는 반환형이 GameObject 기 때문에 안맞다.
+GameObject 안에 Transform 이 있기 때문에 GameObject.Find("Player").transform 으로 GameObject의 Player가 가지고 있는 transform 을 target에 대입한다.
+
+
+
+
+Fixed Update 에서 케릭터 위치를 옮겨주면 타이밍 차이 때문인지 덜덜 떨리면서 한타임 늦게 따라온다.
+
+ Slerp : 구면선형보간 -> 댐핑값이 커질수록 민감해짐.
+ Lerp  : 선형보간 -> 댐핑값이 커질수록 둔감해짐.
+ 보간함수 사용 이융 : 즉각적인 반응보다 부드럽게 처리하기 위함.
+
+
+LookAt(타겟의 포지션(피봇 기준));
+
+
+===========================================
+0825 
+
+유니티의 Animator 종류 2가지
+Legacy (구형) - component 이름이 Animation
+Mecanim(Generic) (신형) - component 이름이 Animator
+
+
+Player 원본 Inspector 
+제일 많이 쓰이는거 Rig, Animation 두개
+Rig에 Animation Type 보면 Generic 인것을 확인 (Legacy 로 변경가능)
+Mecanim : Generic 과 Humanoid 로 나뉜다.
+
+
+Anamation pakage를 받아서 안에 있는애들을 07.Animation 에 넣음
+각각 Idle, RunF B L R 애들 Wrap Mode = Loop로 변경
+미리보기 창에 Player 선택하면 캐릭터가 움직이는거 보임
+
+
+복수선택 - Inspector 창 바뀌니까 락 걸기
+
+
+Anamator : 컨트롤러가 달려있음.(미션이 자동 변속해줌)
+
+Animation : 수동. 변속 수동으로 해줘야함.
+
+anim.CrossFade : 애니메이션 변환할 때 안어색하게 좀 섞어주는거(블랜딩)
+
+
+
+hierarchy 에서 부모 오브젝트를 움직이면 자식도 따라 움직인다.
+=> 총을 Player에 붙여서 따라 움직인다.
+대신 회전이 이상하게 되서 카메라는 이렇게 안씀.
+
+총 추가 후 reset
+
+
+기즈모 : 인스펙터에서 이름 왼쪽에 박스 클릭- 색깔 지정하면 씬뷰에 이름표가 생김.
+선택하기 쉽게 할 수 있다.
+
+
+
+Directional Light - Shadow Type 
+Ojbect 에서 Mesh-Renderer - Lighting - cast shadow, recive shadow
+
+recieve Shadows - 내 그림자랑 다른 그림자랑 부딪혔을 때 연산 할건지
+cast Shadows 가 꺼져있어도 recieve가 켜져있으면 연산은 한다.
+
+바닥에 Quad 만들고 눕힌 후에, 높이를 살짝 올려준다.
+Collider 제거(그림자니까 충돌 필요X)
+
+resorce 폴더에 있는 그림자 이미지를 받아와서 Shadows 객체에 넣어준다
+Standard 쉐이더는 투명처리를 못해주므로, Mobile - Particles - Multiply
+
+
+Level of Detail
+화면이 가까우면 LOD0 -> LOD1 -> LOD2 ->Culled 화면 멀면
+디자인을 섬세한거 -> 투박한거 순으로 틀어서 렌더링 리소스를 줄인다.
+화면 거리에 따른 퀄리티 조절
+
+
+프로젝타입 방식 
+총알 자체가 날아감. 총알 하나하나가 객체로서 작용.
+눈에 보이기 때문에 실감남, 리소스 up
+
+raycast 방식
+레이져를 뿌려서 빛이 충돌체에 도착하면 Hit 판정.
+시각적인 효과 X,  리소스 Down, 성능 Up. 
+
+
+모델의 xyz와 게임의 xyz가 다를 때, Creat Empty를 만들어서 그 자식으로 모델을 집어넣으면 그 Empty의 위치를 타겟으로 모델과 게임의 xyz를 동일하게 움직이는 기능을 사용할 수 있다. (Empty가 본체, 모델은 디자인껍데기)
+
+단, 이경우에 자식으로 들어간 모델의 Positio은 Empty를 기준으로 되기 때문에, 무조건 0, 0, 0 인지 확인해야 한다.
+
+
+
+Rigidbody
+Mass : 질량. f = ma에서 m. 
+Drag : 정지마찰계수
+Angular Drag : 회전마찰계수
+Is Kinematic : 물리엔진의 영향을 받을지 안받을지
+
+Interpolate, Collision Detection : 물리엔진 계산을 더 집중해라 
+-> 리소스 
+
+충돌체는 충돌이 일어나는 Object 모두에 있어야 한다.
++ 둘 중 하나라도 Rigidbody가 있어야 함.
+
+
+Vector123.forward : 글로벌 좌표(기준벡터) z축으로 감
+transform.forward : object 좌표 z축으로 감

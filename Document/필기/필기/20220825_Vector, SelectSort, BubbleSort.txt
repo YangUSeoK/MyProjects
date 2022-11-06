@@ -1,0 +1,217 @@
+오후 2:39 2022-08-25
+
+Vector
+배열의 단점 - 한번 만들어지면 크기가 고정
+이 단점을 해결한 자료구조.
+
+
+
+구조체 char*
+동적할당 문자열로 받기
+
+
+==========================
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+#define SAFE_FREE(p) do{if(p){free(p);p = NULL;}}while(0)
+
+
+typedef struct _SNode {
+
+	int num;
+	int age;
+
+} SNode;
+
+// 구조체 초기화 예시
+// SNode node = {1, "kim"};
+
+
+
+void AddData(const int _num, const int _age);
+int ExtendNodeList();
+void PrintNodeList();
+
+
+// 선택정렬
+void SelectSort();
+
+// 버블정렬
+void BubbleSort();
+
+void Swap(int* const lhs, int* const rhs);
+
+
+
+SNode* pNodeList = NULL;
+int nodeListLen = 15;
+int curIndex = 0;	// 데이터 삽입커서
+int input = 0;
+
+
+int main() {
+	
+	// Vector(ArrayList) : 배열의 단점 해소. 배열의 크기가 가변적으로 변함
+	// 배열의 최대 단점 : 한번 만들어지면 크기를 변경할 수 없다.
+	pNodeList = (SNode*)malloc(sizeof(SNode) * nodeListLen);
+	SNode node = { 0, 0 };
+
+
+
+
+	printf(" 숫자 %d 개를 입력하세요. : ", nodeListLen);
+	for (int i = 0; i < nodeListLen; ++i) {
+		scanf_s("%d", &input);
+		AddData(0,input);
+	}
+	PrintNodeList();
+
+	//printf("\n\nSelectSort...\n\n");
+
+	//SelectSort();
+
+	printf("\n\nBubbleSort...\n\n");
+	BubbleSort();
+	printf("\n\n\n");
+
+	PrintNodeList();
+
+	printf("\n\n\n");
+
+
+
+
+
+
+
+	
+
+
+
+
+	
+	SAFE_FREE(pNodeList);
+
+	return 0;
+
+}//main
+
+
+void AddData(const int _num, const int _age) {
+
+	if (pNodeList == NULL) return;
+	if (curIndex < 0) return;
+
+	if (curIndex >= nodeListLen) {
+		//확장
+		if (ExtendNodeList()) {
+			return;
+		}
+	}
+
+	(*(pNodeList + curIndex)).num = _num;
+	(pNodeList + curIndex)->age = _age;
+
+	printf("AddData : [%d , %d]\n", (pNodeList + curIndex)->num, (pNodeList + curIndex)->age);
+
+	++curIndex;
+}
+
+int ExtendNodeList() {
+
+	int copyLen = nodeListLen;
+	nodeListLen <<= 1;
+
+	// 새 배열 만들어서 복사
+	SNode* newNodeList = (SNode*)malloc(sizeof(SNode) * nodeListLen);
+
+	// 동적할당 실패 예외처리
+	// (2배씩 복사하니까 실패할 가능성 있다. 게임의 경우 1기가씩도 함)
+	if (newNodeList == NULL) {  
+		printf("Out of memory!\n\n");
+		nodeListLen >>= 1;
+		return 1;
+	}
+
+	for (int i = 0; i < copyLen; ++i) {
+		(newNodeList + i)->num = (pNodeList + i)->num;
+		(newNodeList + i)->age = (pNodeList + i)->age;
+	}
+
+	SAFE_FREE(pNodeList);
+	pNodeList = newNodeList;
+	printf("\nExtend success! (%d)\n\n", nodeListLen);
+
+	return 0;
+}
+
+
+void PrintNodeList() {
+	if (pNodeList == NULL) return;
+	if (curIndex < 0 || curIndex >= nodeListLen) return;
+
+
+	for (int i = 0; i < curIndex; ++i) {
+		printf("[%d]", (pNodeList + i)->age);
+	}
+	printf("\nnodeListLen : %d\n", nodeListLen);
+
+
+}
+
+
+void SelectSort() {
+	if (pNodeList == NULL) return;
+	if (curIndex < 0 || curIndex >= nodeListLen) return;
+
+	int minIdx = 0;
+	int tmp = 0;
+
+	for (int i = 0; i < curIndex; ++i) {
+		minIdx = i;
+		for (int j = i; j < curIndex-1; ++j) {
+			if ((pNodeList + minIdx)->age >= (pNodeList + j + 1)->age) {
+				minIdx = j + 1;
+			}
+		}
+		if (minIdx != i) {
+			Swap((&(pNodeList + minIdx)->age), (&(pNodeList + i)->age));
+	
+		}
+		
+	
+	}
+
+	return;
+
+}
+
+void BubbleSort() {
+
+	if (pNodeList == NULL) return;
+	if (curIndex < 0 || curIndex >= nodeListLen) return;
+
+
+	for (int i = 0; i < curIndex - 1; ++i) {
+		for (int j = 0; j < curIndex - 1 - i; ++j) {
+			if ((pNodeList + j)->age > (pNodeList + j + 1)->age) {
+				Swap(&((pNodeList + j)->age), &((pNodeList + j + 1)->age));
+			}
+		}
+	}
+}
+
+
+
+
+
+void Swap(int* const lhs, int* const rhs) {
+	int tmp = *lhs;
+	*lhs = *rhs;
+	*rhs = tmp;
+	return;
+}
+
+

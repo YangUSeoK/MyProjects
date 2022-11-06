@@ -1,0 +1,83 @@
+#include <stdio.h>
+
+int main() {
+
+/////////////////////////////////////////////////////////
+
+	// 1. 문자열 버퍼(Buffer) 준비
+	char buf[256];
+
+	// 2. 문자열이 들어있는 배열 준비
+	// 2-1. Hello
+	// 2-2. ,
+	// 2-3. ' ' (Blank)
+	// 2-4. World
+	// 2-5. !
+
+	// 3. buf에 문자열 합치기
+	// 4. buf 출력
+
+	//char hello[5][6] = { "Hello", ",", " ", "World", "!" };		// 선언과 동시에 초기화(대입)
+
+	char hello1[] = "Hello";
+	char hello2[] = ",";
+	char hello3[] = " ";
+	char hello4[] = "World";
+	char hello5[] = "!";
+	char *helloPtr[] = {hello1, hello2, hello3, hello4, hello5};	// 배열의 이름을 요소로 가지기 때문에, 포인터배열을 선언한다.
+
+
+	//printf("버퍼 초기화 확인 : %s\n", buf);
+	//printf("size of hello : %d\n", sizeof(hello_[1]));
+	//printf("%p\n%p\n%p\n%p\n%p\n", hello_[0], hello_[1], hello_[2], hello_[3], hello_[4]);
+	//printf("%c\n%c\n%c\n%c\n%c\n", *(hello_[0]+1), *hello_[1], *hello_[2], *hello_[3], *hello_[4]);
+
+	//printf("%d\n", sizeof(hello_[0]));					// 포인터배열 hello_를 통해서 들어가면 8byte = 주소값이니까.
+	//printf("%d\n", sizeof(hello1));						// 그냥 크기를 재면 제대로 나온다
+
+
+	//for (int i = 0; i < 5; ++i) {							// 잘 들어갔는지 확인
+	//	printf("%s ", hello[i]);
+	//}
+
+	//printf("\n문자열 저장 끝\n\n\n");
+
+	//int p = 0;
+	//for (int i = 0; i < 5; ++i) {
+	//	for (int j = 0; j < sizeof(hello[i]); ++j) {
+	//		if (hello[i][j] != '\0') {
+	//			buf[p] = hello[i][j];
+	//			++p;
+	//		}
+	//	}
+	//}
+
+
+	int p = 0;															// 버퍼의 커서위치를 나타내 줄 변수.
+	for (int i = 0; i < sizeof(helloPtr)/sizeof(helloPtr[0]); ++i) {		// hello_의 크기 / 한 요소의 크기 = 요소의 갯수
+		for (int j = 0;; ++j) {											// hello_ 를 포인터변수로 잡아서 요소의 크기가 8byte로 고정이 되버렸다. 그래서 j는 각 hello_[i] 의 sizeof 만큼 돌리는게 불가능함. 
+																		// 그래서 무한루프로 돌리고, if문에 break를 이용해 반복을 종료하게 만들었음.
+			if (*(helloPtr[i]+j)!='\0') {									// hello_[i] 는 포인터(주소값) 이다. hello_[i] 는 i가 늘어날 수록 2차원배열의 row가 바뀌는 시작점의 주소, +j 는 하위 1차원배열의 1칸씩 점프하는 시작점의 주소(char니까 1byte씩 시작점이 점프)
+				buf[p] = *(helloPtr[i]+j);
+
+				//printf("%c\n", buf[p]);				// 작업하면서 중간중간 값을 확인하기 위한 코드들
+				//printf("%s\n", buf);
+				++p;													// buf의 현재 위치(커서) 를 한칸 넘겨준다.
+			}
+			else if (*(helloPtr[i] + j) == '\0') {						// null 문자를 만나면 이너루프 종료. 아우터루프 다음바퀴로 간다.
+				//printf("\n");
+				break;
+			}
+			else {														// 이너루프를 무한루프로 만들었기 때문에, 혹여 모를 오류를 대비해 탈출문 작성.
+				printf("\n오류\n");
+				break;
+			}
+		}			
+		
+	}
+	buf[p] = '\0';										// 버퍼의 마지막에 Null 문자 대입. 이게 없으면 buf를 256바이트 전체 다 읽게된다 => 초기화 안했을때 쓰레기값 출력됨.
+	printf("%s\n", buf);								// buf 출력.
+
+	return 0;
+
+}
