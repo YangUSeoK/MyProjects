@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class VolumeLight : MonoBehaviour
@@ -109,10 +110,13 @@ public class VolumeLight : MonoBehaviour
         mLightMesh.vertices = vertices;
         mLightMesh.triangles = triangles;
         mLightMesh.RecalculateNormals();
+        
 
         // 콜라이더는 aabb tree를 사용하기 때문에, 메쉬가 변경되면 다시 빌드해주어야 한다.
         m_MeshCollider.enabled = false;
         m_MeshCollider.enabled = true;
+
+        
     }
 
 
