@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MovingObject
 {
@@ -10,6 +11,8 @@ public class Player : MovingObject
 
     public float restartLevelDelay = 1f;
 
+    public Text foodText;
+
     private Animator animator;
     private int food;
 
@@ -18,6 +21,8 @@ public class Player : MovingObject
         animator = GetComponent<Animator>();
 
         food = GameManager.instance.playerFoodPoints;
+
+        foodText.text = $"Food : {food}";
 
         base.Start();
     }
@@ -58,13 +63,17 @@ public class Player : MovingObject
         else if (collision.CompareTag("Food"))
         {
             food += pointsPerFood;
+            foodText.text = $"+ {pointsPerFood} Food : {food}";
+
             collision.gameObject.SetActive(false);
         }
         else if (collision.CompareTag("Soda"))
         {
             food += pointsPerSoda;
+            foodText.text = $"+ {pointsPerSoda} Food : {food}";
             collision.gameObject.SetActive(false);
         }
+
     }
 
 
@@ -79,7 +88,7 @@ public class Player : MovingObject
     {
         // 한칸 움직일 때 마다 음식 1 깎임
         food--;
-
+        foodText.text = $"Food : {food}";
         // 부딪힌 컴포넌트 정보를 가지고 부모의 AttemptMove를 호출한다.
         base.AttemptMove<T>(_xDir, _yDir);
 
@@ -108,6 +117,7 @@ public class Player : MovingObject
     {
         animator.SetTrigger("playerHit");
         food -= _loss;
+        foodText.text = $"- {_loss} Food : {food}";
         CheckIfGameOver();
     }
     private void CheckIfGameOver()
