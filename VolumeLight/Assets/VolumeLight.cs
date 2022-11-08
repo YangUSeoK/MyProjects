@@ -78,6 +78,10 @@ public class VolumeLight : MonoBehaviour
             lightPointList.Add(newRayCastInfo.pointPos);
         }
 
+
+        // 아래부터는 메쉬 만드는 부분
+
+
         // 20221106 양우석 : 메쉬 만드는 함수는 따로 쪼갤 것
         // +1 해주는 이유 : 맨 처음 시작점 개수를 추가해줘야 한다.
         int vertexCnt = lightPointList.Count + 1;
@@ -136,8 +140,7 @@ public class VolumeLight : MonoBehaviour
         }
     }
 
-    // 각도를 수치로 입력받으면 내 현재 각도에서 그만큼 회전한 방향의 방향벡터를 반환한다.
-    // 
+    // 각도를 수치로 입력받으면 내 현재 각도에서 그만큼 회전한 방향의 방향벡터를 반환한다. : 기준벡터
     private Vector3 DirFromAngle(float _angleDegree, float _verticalAngleDegree, bool _angleIsGlobal)
     {
         if (!_angleIsGlobal)
@@ -146,8 +149,11 @@ public class VolumeLight : MonoBehaviour
             _verticalAngleDegree += transform.eulerAngles.x;
         }
         
-        // y값(세로 회전) 구면좌표계로 벡터 구하는걸로 수정해야 함.
-        return new Vector3(Mathf.Cos((-_angleDegree + 90f) * Mathf.Deg2Rad), 2f * Mathf.Sin(-_verticalAngleDegree * Mathf.Deg2Rad), Mathf.Sin((-_angleDegree + 90f) * Mathf.Deg2Rad));
+        
+        // 20221108 양우석 : 해결했음.
+        return new Vector3(Mathf.Cos((-_angleDegree + 90f) * Mathf.Deg2Rad), 
+                            Mathf.Tan(-_verticalAngleDegree * Mathf.Deg2Rad), 
+                            Mathf.Sin((-_angleDegree + 90f) * Mathf.Deg2Rad)).normalized;
     }
 
 
