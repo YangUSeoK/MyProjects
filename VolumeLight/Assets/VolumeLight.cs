@@ -8,10 +8,9 @@ public class VolumeLight : MonoBehaviour
 
     // Ray 관련
     private Light m_Light = null;
-    private float m_LightRange = 0f;
 
     // 레이를 쪼개는 비율. 클수록 잘게 쪼갠다
-    [SerializeField] private float m_MeshRate = 0.1f;
+    [SerializeField] private int subDivision = 10;
 
 
     // Mesh 생성관련. 20221106 양우석 : 나중에 클래스 쪼갤 수도 있음.
@@ -24,27 +23,20 @@ public class VolumeLight : MonoBehaviour
     {
         public bool isHit;
         public Vector3 pointPos;
-        public float distance;
-        public float angle;
+        
 
         // 생성자
-        public RaycastInfo(bool _isHit, Vector3 _pointPos, float _distance, float _angle)
+        public RaycastInfo(bool _isHit, Vector3 _pointPos)
         {
             isHit = _isHit;
             pointPos = _pointPos;
-            distance = _distance;
-            angle = _angle;
         }
     }
 
     private void Awake()
     {
-        m_Light = GetComponent<Light>();
-
-        // 프로퍼티에 계속 접근하는거 싫어서 변수에 저장.
-        m_LightRange = m_Light.range;
-
         mLightMesh = new Mesh();
+        m_Light = GetComponent<Light>();
         mLightMesh.name = "LightMesh";
         GetComponentInChildren<MeshFilter>().mesh = mLightMesh;
         m_MeshCollider = GetComponentInChildren<MeshCollider>();
@@ -53,38 +45,53 @@ public class VolumeLight : MonoBehaviour
 
     private void LateUpdate()
     {
-        DrawFOV();
+        DrawCone();
     }
 
-    private void DrawFOV()
+    private void DrawCone()
     {
-        // 각도 * 비율 반올림
-        int stepCnt = Mathf.RoundToInt(m_Light.spotAngle * m_MeshRate);
+        float n = 1f / (subDivision - 1f);
+        float radius = Mathf.Tan((m_Light.spotAngle * 0.5f) * Mathf.Deg2Rad);
+        float length = m_Light.range / Mathf.Cos(m_Light.spotAngle * 0.5f * Mathf.Deg2Rad);
+        Vector3 origCircleVert;
+        Vector3 newCircleVert;
 
-        // 다시 빛의 각도로 나눠서 쪼개지는 앵글의 각을 구함
-        float stepAngleSize = m_Light.spotAngle / stepCnt;
+        List<Vector3> lightVertList = new List<Vector3>();
 
-        List<Vector3> lightPointList = new List<Vector3>();
-
-        // 부채꼴로 레이를 쏴서 구자체에 정보를 저장한다.
-        for (int i = 0; i <= stepCnt; ++i)
+        for (int i = 0; i < subDivision; ++i)
         {
-            float angle = transform.eulerAngles.y - (m_Light.spotAngle / 2) + (stepAngleSize * i);
+            float ratio = ((float)i) * n;            // 원을 비율로 나눔
+            float theta = (Mathf.PI * 2f) * ratio;   // 원주 * 비율 = 각도
+            float x = Mathf.Cos(theta) * radius;
+            float y = Mathf.Sin(theta) * radius;
 
-            // 디버그용 DrawLine
-            //Debug.DrawLine(transform.position, transform.position + DirFromAngle(angle, true) * m_LightRange, Color.green);
+            origCircleVert = new Vector3(x, y, 1); //>> z축 중심으로 만든 원의 좌표
 
-            RaycastInfo newRayCastInfo = SetRaycastInfo(angle);
-            lightPointList.Add(newRayCastInfo.pointPos);
+            // 회전행렬을 통해 회전시킨다.
+            Quaternion rotation = Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, transform.eulerAngles.z);
+            Matrix4x4 rotMatrix = Matrix4x4.Rotate(rotation);
+
+            newCircleVert = rotMatrix.MultiplyPoint3x4(origCircleVert);
+
+            //Debug.DrawLine(transform.position, newCircleVert, Color.green);
+            //Debug.DrawLine(transform.position, CirclePointPos * length, Color.green);
+
+
+            // 이제 각각의 점 위치를 향해 length 길이만큼 레이를 쏘면 된다. 
+            RaycastInfo newRayCastInfo = SetRaycastInfo(newCircleVert, length);
+            lightVertList.Add(newRayCastInfo.pointPos);
         }
 
+        BuildMesh(lightVertList);
+    }
 
-        // 아래부터는 메쉬 만드는 부분
 
+    // Vertex 리스트를 받아서 메쉬를 만들어준다.
+    private void BuildMesh(List<Vector3> _lightVertList) { 
 
         // 20221106 양우석 : 메쉬 만드는 함수는 따로 쪼갤 것
         // +1 해주는 이유 : 맨 처음 시작점 개수를 추가해줘야 한다.
-        int vertexCnt = lightPointList.Count + 1;
+        int vertexCnt = _lightVertList.Count + 1;
         Vector3[] vertices = new Vector3[vertexCnt];
 
 
@@ -99,7 +106,7 @@ public class VolumeLight : MonoBehaviour
         for (int i = 0; i < vertexCnt - 1; ++i)
         {
             // InverseTransformPoint : 로컬좌표 위치 받아오기.
-            vertices[i + 1] = transform.InverseTransformPoint(lightPointList[i]);
+            vertices[i + 1] = transform.InverseTransformPoint(_lightVertList[i]);
 
             // 배열맵핑으로 수정
             if (i < vertexCnt - 2)
@@ -113,30 +120,26 @@ public class VolumeLight : MonoBehaviour
         mLightMesh.Clear();
         mLightMesh.vertices = vertices;
         mLightMesh.triangles = triangles;
-        mLightMesh.RecalculateNormals();
-        
+        mLightMesh.RecalculateNormals();    // 노말 달아주기
 
         // 콜라이더는 aabb tree를 사용하기 때문에, 메쉬가 변경되면 다시 빌드해주어야 한다.
         m_MeshCollider.enabled = false;
         m_MeshCollider.enabled = true;
-
-        
     }
 
 
-    // tarnsform의 Euler.y 값을 인자로 받아와서, 그 방향으로 Ray를 쏴서 hit 정보를 구조체에 저장한다.
-    private RaycastInfo SetRaycastInfo(float _angleDegree)
+    // 20221109 양우석 : 원형에 맞게 함수 수정. 방향벡터와 길이를 받아와서 레이를 쏘고,
+    // 충돌정보를 RaycastInfo 구조체에 저장한다.
+    private RaycastInfo SetRaycastInfo(Vector3 _dir, float _length)
     {
-        Vector3 dir = DirFromAngle(_angleDegree, transform.eulerAngles.x, true);
-
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, dir, out hit, m_LightRange))
+        RaycastHit hitInfo;
+        if (Physics.Raycast(transform.position, _dir, out hitInfo, _length))
         {
-            return new RaycastInfo(true, hit.point, hit.distance, _angleDegree);
+            return new RaycastInfo(true, hitInfo.point);
         }
         else
         {
-            return new RaycastInfo(false, transform.position + (dir * m_LightRange), m_LightRange, _angleDegree);
+            return new RaycastInfo(false, transform.position + (_dir * _length));
         }
     }
 
@@ -148,11 +151,11 @@ public class VolumeLight : MonoBehaviour
             _angleDegree += transform.eulerAngles.y;
             _verticalAngleDegree += transform.eulerAngles.x;
         }
-        
-        
+
+
         // 20221108 양우석 : 해결했음.
-        return new Vector3(Mathf.Cos((-_angleDegree + 90f) * Mathf.Deg2Rad), 
-                            Mathf.Tan(-_verticalAngleDegree * Mathf.Deg2Rad), 
+        return new Vector3(Mathf.Cos((-_angleDegree + 90f) * Mathf.Deg2Rad),
+                            Mathf.Tan(-_verticalAngleDegree * Mathf.Deg2Rad),
                             Mathf.Sin((-_angleDegree + 90f) * Mathf.Deg2Rad)).normalized;
     }
 

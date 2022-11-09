@@ -618,19 +618,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6670460160738876824, guid: 69dab67c3d2d9f44c812293882d01875, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.8820159
       objectReference: {fileID: 0}
     - target: {fileID: 6670460160738876824, guid: 69dab67c3d2d9f44c812293882d01875, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 6670460160738876824, guid: 69dab67c3d2d9f44c812293882d01875, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: 0.47121978
       objectReference: {fileID: 0}
     - target: {fileID: 6670460160738876824, guid: 69dab67c3d2d9f44c812293882d01875, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 6670460160738876824, guid: 69dab67c3d2d9f44c812293882d01875, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -638,7 +638,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6670460160738876824, guid: 69dab67c3d2d9f44c812293882d01875, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 56.227
       objectReference: {fileID: 0}
     - target: {fileID: 6670460160738876824, guid: 69dab67c3d2d9f44c812293882d01875, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -647,6 +647,22 @@ PrefabInstance:
     - target: {fileID: 6670460160738876825, guid: 69dab67c3d2d9f44c812293882d01875, type: 3}
       propertyPath: m_Name
       value: Light
+      objectReference: {fileID: 0}
+    - target: {fileID: 6670460161630503148, guid: 69dab67c3d2d9f44c812293882d01875, type: 3}
+      propertyPath: subDivision
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 6670460161630503149, guid: 69dab67c3d2d9f44c812293882d01875, type: 3}
+      propertyPath: m_Range
+      value: 5.67
+      objectReference: {fileID: 0}
+    - target: {fileID: 6670460161630503149, guid: 69dab67c3d2d9f44c812293882d01875, type: 3}
+      propertyPath: m_SpotAngle
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 6670460161630503149, guid: 69dab67c3d2d9f44c812293882d01875, type: 3}
+      propertyPath: m_InnerSpotAngle
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 69dab67c3d2d9f44c812293882d01875, type: 3}
