@@ -27,12 +27,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         PhotonNetwork.ConnectUsingSettings();
     }
 
-    private void Start()
-    {
-        nickName = PlayerPrefs.GetString("USER_ID", $"USER_{Random.Range(1,21) : 00}");
-        userID.text = nickName;
-        PhotonNetwork.NickName = nickName;
-    }
+   
 
     void SetUserID()
     {

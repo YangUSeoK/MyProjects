@@ -17,22 +17,6 @@ public class VolumeLight : MonoBehaviour
     private Mesh mLightMesh = null;
     private MeshCollider m_MeshCollider = null;
 
-
-    // ray의 정보를 저장하는 구조체
-    private struct RaycastInfo
-    {
-        public bool isHit;
-        public Vector3 pointPos;
-        
-
-        // 생성자
-        public RaycastInfo(bool _isHit, Vector3 _pointPos)
-        {
-            isHit = _isHit;
-            pointPos = _pointPos;
-        }
-    }
-
     private void Awake()
     {
         mLightMesh = new Mesh();
@@ -78,8 +62,9 @@ public class VolumeLight : MonoBehaviour
 
 
             // 이제 각각의 점 위치를 향해 length 길이만큼 레이를 쏘면 된다. 
-            RaycastInfo newRayCastInfo = SetRaycastInfo(newCircleVert, length);
-            lightVertList.Add(newRayCastInfo.pointPos);
+            Vector3 raycastPoint = SetRaycastPoint(newCircleVert, length);
+
+            lightVertList.Add(raycastPoint);
         }
 
         BuildMesh(lightVertList);
@@ -93,7 +78,6 @@ public class VolumeLight : MonoBehaviour
         // +1 해주는 이유 : 맨 처음 시작점 개수를 추가해줘야 한다.
         int vertexCnt = _lightVertList.Count + 1;
         Vector3[] vertices = new Vector3[vertexCnt];
-
 
 
         // 삼각형 개수 : vertexCnt-2
@@ -130,16 +114,20 @@ public class VolumeLight : MonoBehaviour
 
     // 20221109 양우석 : 원형에 맞게 함수 수정. 방향벡터와 길이를 받아와서 레이를 쏘고,
     // 충돌정보를 RaycastInfo 구조체에 저장한다.
-    private RaycastInfo SetRaycastInfo(Vector3 _dir, float _length)
+    // 20221113 양우석 : 생각해보니까 isHit 을 쓸 필요가 없어서 지웠음.
+    // 점 하나마다 구조체 동적할당하고 가비지콜렉터 돌리는거 개에바쎄바
+
+    // 방향벡터와 길이를 받아와서 레이를 쏘고 point를 반환한다.
+    private Vector3 SetRaycastPoint(Vector3 _dir, float _length)
     {
         RaycastHit hitInfo;
         if (Physics.Raycast(transform.position, _dir, out hitInfo, _length))
         {
-            return new RaycastInfo(true, hitInfo.point);
+            return hitInfo.point;
         }
         else
         {
-            return new RaycastInfo(false, transform.position + (_dir * _length));
+            return transform.position + (_dir * _length);
         }
     }
 
@@ -158,6 +146,5 @@ public class VolumeLight : MonoBehaviour
                             Mathf.Tan(-_verticalAngleDegree * Mathf.Deg2Rad),
                             Mathf.Sin((-_angleDegree + 90f) * Mathf.Deg2Rad)).normalized;
     }
-
 
 }
