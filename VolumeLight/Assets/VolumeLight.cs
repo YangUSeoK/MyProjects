@@ -10,7 +10,7 @@ public class VolumeLight : MonoBehaviour
     private Light m_Light = null;
 
     // 레이를 쪼개는 비율. 클수록 잘게 쪼갠다
-    [SerializeField] private int subDivision = 10;
+    [SerializeField] private int m_SubDivision = 100;
 
 
     // Mesh 생성관련. 20221106 양우석 : 나중에 클래스 쪼갤 수도 있음.
@@ -34,15 +34,16 @@ public class VolumeLight : MonoBehaviour
 
     private void DrawCone()
     {
-        float n = 1f / (subDivision - 1f);
+        float n = 1f / (m_SubDivision);
         float radius = Mathf.Tan((m_Light.spotAngle * 0.5f) * Mathf.Deg2Rad);
         float length = m_Light.range / Mathf.Cos(m_Light.spotAngle * 0.5f * Mathf.Deg2Rad);
         Vector3 origCircleVert;
         Vector3 newCircleVert;
 
-        List<Vector3> lightVertList = new List<Vector3>();
+        // Vector3 = float x 3 =>         int * 3 * 기준원의 점 개수
+        List<Vector3> lightVertList = new List<Vector3>(3 * m_SubDivision);
 
-        for (int i = 0; i < subDivision; ++i)
+        for (int i = 0; i < m_SubDivision; ++i)
         {
             float ratio = ((float)i) * n;            // 원을 비율로 나눔
             float theta = (Mathf.PI * 2f) * ratio;   // 원주 * 비율 = 각도
