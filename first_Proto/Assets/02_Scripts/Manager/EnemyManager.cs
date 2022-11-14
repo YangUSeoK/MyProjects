@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
 {
-    private GameObject[] mEnemys = null;
+    private Enemy[] mEnemys = null;
 
 
     private void Awake()
     {
-        mEnemys = GetComponentsInChildren<GameObject>();
+        mEnemys = GetComponentsInChildren<Enemy>();
     }
 
     public void GameOver()
     {
-        foreach(GameObject enemy in mEnemys)
+        foreach(Enemy enemy in mEnemys)
         {
             enemy.GetComponent<EnemyMove>().Agent.isStopped = true;
         }

@@ -6,18 +6,18 @@ public class FlagManager : MonoBehaviour
 {
 
     [SerializeField]
-    private Flag[] mFlags = null;
+    private Flag[] m_Flags = null;
     public Flag[] Flags
     {
         get
         {
-            return mFlags;
+            return m_Flags;
         }
     }
 
 
     private void Awake()
     {
-        mFlags = GetComponentsInChildren<Flag>();
+        m_Flags = GetComponentsInChildren<Flag>();
     }
 }

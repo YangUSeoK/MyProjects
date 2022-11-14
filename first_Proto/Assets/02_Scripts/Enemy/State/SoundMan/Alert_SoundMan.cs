@@ -2,27 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Attack : EnemyState
+public class Alert_SoundMan : EnemyState
 {
-    public Attack(Enemy _enemy) : base("Attack", _enemy) { }
-
+    public Alert_SoundMan(Enemy _enemy) : base("Alert", _enemy) { }
+ 
     public override void EnterState()
     {
-        Debug.Log("Attack ÀÔÀå!");
+        Debug.Log("Alert ÀÔÀå!");
     }
 
     public override void ExitState()
     {
-        Debug.Log("Attack ÅðÀå!");
+        Debug.Log("Alert ÅðÀå!");
     }
 
     public override void Action()
     {
-        Debug.Log("Attack ¹°¸®¾÷µ«!");
+        Debug.Log("Alert ¹°¸®¾÷µ«!");
     }
 
     public override void CheckState()
     {
-        Debug.Log("Attack ¾÷µ«!");
+        Debug.Log("Alert ¾÷µ«!");
     }
 }
