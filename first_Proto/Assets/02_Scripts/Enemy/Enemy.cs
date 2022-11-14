@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.AI;
 
 public abstract class Enemy : MonoBehaviour
 {
@@ -80,6 +81,13 @@ public abstract class Enemy : MonoBehaviour
     {
         get { return m_PlayerTr; }
     }
+
+    protected NavMeshAgent m_Agent;
+    public NavMeshAgent Agent
+    {
+        get { return m_Agent; }
+    }
+
     #endregion
 
     #region State
@@ -98,6 +106,10 @@ public abstract class Enemy : MonoBehaviour
     protected EnemyState m_CurState = null;
     #endregion
 
+    protected virtual void Awake()
+    {
+        m_Agent = GetComponent<NavMeshAgent>();
+    }
 
 
     protected void Start()

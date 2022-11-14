@@ -42,8 +42,11 @@ public class Enemy_SightMan : Enemy
     private FOVForLight m_FOVForLight = null;
 
 
-    protected  void Awake()
+   
+
+    protected override void Awake()
     {
+        base.Awake();
         m_Patrol = new Patrol_SightMan(this);
         m_Alert = new Alert_SightMan(this);
         m_Trace = new Trace_SightMan(this);
@@ -62,6 +65,7 @@ public class Enemy_SightMan : Enemy
     {
         m_Patrol.FOVForPlayer = m_FOVForPlayer;
         m_Patrol.FOVForLight = m_FOVForLight;
+        m_Patrol.Agent = m_Agent;
         m_Patrol.MoveSpeed = m_PatrolSpeed;
         m_Patrol.Flags = m_FlagManager.Flags;
     }

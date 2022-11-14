@@ -45,6 +45,7 @@ public abstract class FOV : MonoBehaviour
 
     public void SetFOV(Transform _targetTr, float _range, float _angle)
     {
+        Debug.Log("setFOV");
         m_TargetTr = _targetTr;
         m_Range = _range;
         m_Angle = _angle;

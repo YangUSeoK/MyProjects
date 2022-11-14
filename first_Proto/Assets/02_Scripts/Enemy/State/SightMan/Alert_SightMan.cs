@@ -28,7 +28,7 @@ public class Alert_SightMan : EnemyState
         float dist = Vector3.Distance(m_Enemy.PlayerTr.position, m_Enemy.transform.position);
         if (dist <= m_Enemy.PatrolPlayerDetectRange)
         {
-            m_Enemy.SetState(((Enemy_SightMan)m_Enemy).Trace);
+            m_Enemy.SetState((m_Enemy as Enemy_SightMan).Trace);
         }
         else
         {

@@ -25,6 +25,6 @@ public class Trace_SoundMan : EnemyState
     {
         Debug.Log("Trace 업뎃!");
         //if(공격사거리 안에 있다면 && 방향이 앞에 있다면)
-        m_Enemy.SetState(((Enemy_SoundMan)m_Enemy).Attack);
+        m_Enemy.SetState((m_Enemy as Enemy_SightMan).Attack);
     }
 }

@@ -8,7 +8,7 @@ public class Patrol_SightMan : EnemyState
 {
     // 생성자
     public Patrol_SightMan(Enemy _enemy) : base("Patrol", _enemy) { }
-  
+
     // Patrol 초기세팅
     private Flag[] m_Flags;
     public Flag[] Flags
@@ -63,7 +63,7 @@ public class Patrol_SightMan : EnemyState
 
         if(m_FOVForPlayer.IsInFOV() && m_FOVForPlayer.IsLookDirect())
         {
-            m_Enemy.SetState(((Enemy_SightMan)m_Enemy).Trace);
+            m_Enemy.SetState((m_Enemy as Enemy_SightMan).Trace);
             return;
         }
 
