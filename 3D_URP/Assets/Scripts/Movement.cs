@@ -38,6 +38,7 @@ public class Movement : MonoBehaviourPunCallbacks, IPunObservable
         pv = GetComponent<PhotonView>();
         virtualCamera = GameObject.FindObjectOfType<CinemachineVirtualCamera>();
 
+        virtualCamera.transform.position = transform.position - transform.forward;
         // 버츄얼카메라 타겟 설정
         if (pv.IsMine)
         {
