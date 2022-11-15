@@ -15,12 +15,8 @@ public class Patrol_Slaughter : EnemyState
     {
         set { m_Flags = value; }
     }
-    
-
    
     private int mNextIdx = 0;
-
-
 
     public override void EnterState()
     {
@@ -31,8 +27,8 @@ public class Patrol_Slaughter : EnemyState
         {
             m_Enemy.SetPatrol();
         }
-
-        m_FOVForPlayer.SetFOV(m_Enemy.PlayerTr, m_Enemy.PatrolDetectRange, m_Enemy.PatrolDetectAngle);
+        m_FOVForPlayer.SetFOV(m_Enemy.PlayerTr, m_Enemy.PatrolPlayerDetectRange, m_Enemy.PatrolDetectAngle);
+        m_FOVForLight.SetFOV((m_Enemy as Enemy_Slaughter).LightTr, m_Enemy.PatrolDetectRange, m_Enemy.PatrolDetectAngle);
     }
 
     public override void ExitState()
@@ -61,16 +57,18 @@ public class Patrol_Slaughter : EnemyState
         Debug.Log("Patrol CheckState!");
         float dist = Vector3.Distance(m_Enemy.PlayerTr.position, m_Enemy.transform.position);
 
+        // 플레이어가 범위안에 들어왔으면
         if(m_FOVForPlayer.IsInFOV() && m_FOVForPlayer.IsLookDirect())
         {
-            m_Enemy.SetState((m_Enemy as Enemy_Slaughter).Trace);
+            m_Enemy.SetState((m_Enemy as Enemy_Slaughter).TracePlayer);
             return;
         }
 
+        // 빛이 범위안에 들어왔으면
         // 어차피 두번 검사해야하는거니까 else if 안써도 같다.
         if(m_FOVForLight.IsInFOV() && m_FOVForLight.IsLookDirect())
         {
-            m_Enemy.SetState(((Enemy_Slaughter)m_Enemy).Alert);
+            m_Enemy.SetState(((Enemy_Slaughter)m_Enemy).TraceLight);
             return;
         }
     }

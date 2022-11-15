@@ -95,7 +95,8 @@ public abstract class Enemy : MonoBehaviour
     {
         Patrol = 0,
         Alert,
-        Trace,
+        TracePlayer,
+        TraceLight,
         Attack,
 
         Length
@@ -145,8 +146,8 @@ public abstract class Enemy : MonoBehaviour
     }
 
     public abstract void SetPatrol();
+    public abstract void SetTracePlayer();
     public abstract void SetAlert();
-    public abstract void SetTrace();
     public abstract void SetAttack();
 
 

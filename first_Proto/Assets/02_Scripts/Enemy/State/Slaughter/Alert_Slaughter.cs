@@ -28,7 +28,7 @@ public class Alert_Slaughter : EnemyState
         float dist = Vector3.Distance(m_Enemy.PlayerTr.position, m_Enemy.transform.position);
         if (dist <= m_Enemy.PatrolPlayerDetectRange)
         {
-            m_Enemy.SetState((m_Enemy as Enemy_Slaughter).Trace);
+            m_Enemy.SetState((m_Enemy as Enemy_Slaughter).TracePlayer);
         }
         else
         {

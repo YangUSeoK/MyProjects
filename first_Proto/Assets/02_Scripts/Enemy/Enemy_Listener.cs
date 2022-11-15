@@ -9,15 +9,15 @@ public class Enemy_Listener : Enemy
     {
         get { return m_Idle; }
     }
+    private Trace_Listener m_TarcePlayer;
+    public Trace_Listener TracePlayer
+    {
+        get { return m_TarcePlayer; }
+    }
     private Alert_Listener m_Alert;
     public Alert_Listener Alert
     {
         get { return m_Alert; }
-    }
-    private Trace_Listener m_Tarce;
-    public Trace_Listener Trace
-    {
-        get { return m_Tarce; }
     }
     private Attack m_Attack;
     public Attack Attack
@@ -26,14 +26,22 @@ public class Enemy_Listener : Enemy
     }
 
 
-
-
-    protected void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         m_Idle = new Idle_Listener(this);
+        m_TarcePlayer = new Trace_Listener(this);
         m_Alert = new Alert_Listener(this);
-        m_Tarce = new Trace_Listener(this);
         m_Attack = new Attack(this);
+    }
+
+    public override void SetPatrol()
+    {
+
+    }
+
+    public override void SetTracePlayer()
+    {
     }
 
     public override void SetAlert()
@@ -44,11 +52,7 @@ public class Enemy_Listener : Enemy
     {
     }
 
-    public override void SetPatrol()
-    {
-    }
+    
 
-    public override void SetTrace()
-    {
-    }
+    
 }

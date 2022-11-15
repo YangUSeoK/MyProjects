@@ -17,8 +17,8 @@ public abstract class FOV : MonoBehaviour
 
     protected virtual void Start()
     {
-        playerLayer = LayerMask.NameToLayer("Player");
-        obstacleLayer = LayerMask.NameToLayer("Obstacle");
+        playerLayer = LayerMask.NameToLayer("PLAYER");
+        obstacleLayer = LayerMask.NameToLayer("OBSTACLE");
         layerMask = (1 << playerLayer) | (1 << obstacleLayer);
     }
 
