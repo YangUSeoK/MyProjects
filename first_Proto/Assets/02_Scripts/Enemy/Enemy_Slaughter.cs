@@ -3,24 +3,24 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
 
-public class Enemy_SightMan : Enemy
+public class Enemy_Slaughter : Enemy
 {
     // EnemyManager∞° ∏‘ø©¡‡æﬂ «‘
     [SerializeField] protected FlagManager m_FlagManager;
 
     // EnemyState, «¡∑Œ∆€∆º
-    private Patrol_SightMan m_Patrol = null;
-    public Patrol_SightMan Patrol
+    private Patrol_Slaughter m_Patrol = null;
+    public Patrol_Slaughter Patrol
     {
         get { return m_Patrol; }
     }
-    private Alert_SightMan m_Alert = null;
-    public Alert_SightMan Alert
+    private Alert_Slaughter m_Alert = null;
+    public Alert_Slaughter Alert
     {
         get { return m_Alert; }
     }
-    private Trace_SightMan m_Trace = null;
-    public Trace_SightMan Trace
+    private Trace_Slaughter m_Trace = null;
+    public Trace_Slaughter Trace
     {
         get { return m_Trace; }
     }
@@ -47,9 +47,9 @@ public class Enemy_SightMan : Enemy
     protected override void Awake()
     {
         base.Awake();
-        m_Patrol = new Patrol_SightMan(this);
-        m_Alert = new Alert_SightMan(this);
-        m_Trace = new Trace_SightMan(this);
+        m_Patrol = new Patrol_Slaughter(this);
+        m_Alert = new Alert_Slaughter(this);
+        m_Trace = new Trace_Slaughter(this);
         m_Attack = new Attack(this);
 
         m_FOVForPlayer = GetComponent<FOVForPlayer>();

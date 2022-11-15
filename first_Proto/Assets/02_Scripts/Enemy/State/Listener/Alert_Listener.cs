@@ -2,27 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Idle_SoundMan : EnemyState
+public class Alert_Listener : EnemyState
 {
-    public Idle_SoundMan(Enemy _enemy) : base("Patrol", _enemy) { }
+    public Alert_Listener(Enemy _enemy) : base("Alert", _enemy) { }
  
     public override void EnterState()
     {
-        Debug.Log("Patrol ÀÔÀå!");
+        Debug.Log("Alert ÀÔÀå!");
     }
 
     public override void ExitState()
     {
-        Debug.Log("Patrol ÅðÀå!");
+        Debug.Log("Alert ÅðÀå!");
     }
 
     public override void Action()
     {
-        Debug.Log("Patrol ¹°¸®¾÷µ«!");
+        Debug.Log("Alert ¹°¸®¾÷µ«!");
     }
 
     public override void CheckState()
     {
-        Debug.Log("Patrol ¾÷µ«!");
+        Debug.Log("Alert ¾÷µ«!");
     }
 }

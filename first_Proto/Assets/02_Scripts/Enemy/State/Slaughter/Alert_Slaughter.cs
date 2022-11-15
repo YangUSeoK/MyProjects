@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Alert_SightMan : EnemyState
+public class Alert_Slaughter : EnemyState
 {
-    public Alert_SightMan(Enemy _enemy) : base("Alert", _enemy) { }
+    public Alert_Slaughter(Enemy _enemy) : base("Alert", _enemy) { }
 
     public override void EnterState()
     {
@@ -28,7 +28,7 @@ public class Alert_SightMan : EnemyState
         float dist = Vector3.Distance(m_Enemy.PlayerTr.position, m_Enemy.transform.position);
         if (dist <= m_Enemy.PatrolPlayerDetectRange)
         {
-            m_Enemy.SetState((m_Enemy as Enemy_SightMan).Trace);
+            m_Enemy.SetState((m_Enemy as Enemy_Slaughter).Trace);
         }
         else
         {

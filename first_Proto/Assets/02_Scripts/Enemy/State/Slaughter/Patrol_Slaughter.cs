@@ -4,10 +4,10 @@ using UnityEngine;
 using UnityEngine.AI;
 //using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
 
-public class Patrol_SightMan : EnemyState
+public class Patrol_Slaughter : EnemyState
 {
     // 생성자
-    public Patrol_SightMan(Enemy _enemy) : base("Patrol", _enemy) { }
+    public Patrol_Slaughter(Enemy _enemy) : base("Patrol", _enemy) { }
 
     // Patrol 초기세팅
     private Flag[] m_Flags;
@@ -63,14 +63,14 @@ public class Patrol_SightMan : EnemyState
 
         if(m_FOVForPlayer.IsInFOV() && m_FOVForPlayer.IsLookDirect())
         {
-            m_Enemy.SetState((m_Enemy as Enemy_SightMan).Trace);
+            m_Enemy.SetState((m_Enemy as Enemy_Slaughter).Trace);
             return;
         }
 
         // 어차피 두번 검사해야하는거니까 else if 안써도 같다.
         if(m_FOVForLight.IsInFOV() && m_FOVForLight.IsLookDirect())
         {
-            m_Enemy.SetState(((Enemy_SightMan)m_Enemy).Alert);
+            m_Enemy.SetState(((Enemy_Slaughter)m_Enemy).Alert);
             return;
         }
     }
