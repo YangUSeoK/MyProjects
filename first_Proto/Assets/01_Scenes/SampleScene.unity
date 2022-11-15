@@ -356,6 +356,10 @@ PrefabInstance:
       propertyPath: m_FlagManager
       value: 
       objectReference: {fileID: 2084859076}
+    - target: {fileID: 1059896895, guid: 7aa8078e51d5861429b8ccf7930787b6, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 724802483520140564, guid: 7aa8078e51d5861429b8ccf7930787b6, type: 3}
       propertyPath: m_PlayerTr
       value: 
@@ -364,6 +368,14 @@ PrefabInstance:
       propertyPath: m_FlagManager
       value: 
       objectReference: {fileID: 2084859076}
+    - target: {fileID: 724802483520140564, guid: 7aa8078e51d5861429b8ccf7930787b6, type: 3}
+      propertyPath: m_PatrolDetectRange
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 724802483520140564, guid: 7aa8078e51d5861429b8ccf7930787b6, type: 3}
+      propertyPath: m_PatrolPlayerDetectRange
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 5313634884459088428, guid: 7aa8078e51d5861429b8ccf7930787b6, type: 3}
       propertyPath: m_Name
       value: Zombie leg_1
@@ -390,15 +402,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5313634884459088467, guid: 7aa8078e51d5861429b8ccf7930787b6, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5313634884459088467, guid: 7aa8078e51d5861429b8ccf7930787b6, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5313634884459088467, guid: 7aa8078e51d5861429b8ccf7930787b6, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5313634884459088467, guid: 7aa8078e51d5861429b8ccf7930787b6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -895,7 +907,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5313634884459088428, guid: 7aa8078e51d5861429b8ccf7930787b6, type: 3}
   m_PrefabInstance: {fileID: 642779574}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1910977518
+--- !u!114 &1910977524
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -904,25 +916,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1910977511}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b987f65a2cafc914d8a3e284e92d9aa6, type: 3}
+  m_Script: {fileID: 11500000, guid: 5aed7fbfe580a8546b87aadbd15f0e8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Angle: 0
-  m_Range: 0
---- !u!114 &1910977519
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1910977511}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c58c8fec6128cb4b8281796922e3dac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Angle: 0
-  m_Range: 0
+  m_Angle: 120
+  m_Range: 20
 --- !u!1 &2006907161
 GameObject:
   m_ObjectHideFlags: 0
@@ -1029,6 +1027,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3156173242389677981, guid: 56820740e5cbcc541a955abd38024068, type: 3}
+      propertyPath: m_SubDivision
+      value: 49
+      objectReference: {fileID: 0}
     - target: {fileID: 6867007044520650904, guid: 56820740e5cbcc541a955abd38024068, type: 3}
       propertyPath: m_Name
       value: P_Player
@@ -1076,6 +1078,30 @@ PrefabInstance:
     - target: {fileID: 6867007044520650905, guid: 56820740e5cbcc541a955abd38024068, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8974211707490772693, guid: 56820740e5cbcc541a955abd38024068, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 8974211707971348482, guid: 56820740e5cbcc541a955abd38024068, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8974211707971348492, guid: 56820740e5cbcc541a955abd38024068, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 8974211707971348492, guid: 56820740e5cbcc541a955abd38024068, type: 3}
+      propertyPath: m_TagString
+      value: LIGHT
+      objectReference: {fileID: 0}
+    - target: {fileID: 8974211708822125473, guid: 56820740e5cbcc541a955abd38024068, type: 3}
+      propertyPath: m_Range
+      value: 16.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8974211708822125473, guid: 56820740e5cbcc541a955abd38024068, type: 3}
+      propertyPath: m_SpotAngle
+      value: 22
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 56820740e5cbcc541a955abd38024068, type: 3}

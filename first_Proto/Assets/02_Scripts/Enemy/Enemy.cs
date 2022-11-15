@@ -22,10 +22,11 @@ public abstract class Enemy : MonoBehaviour
         get { return m_AlertSpeed; }
     }
 
-    [SerializeField] protected float m_TraceSpeed;
-    public float TraceSpeed
+
+    [SerializeField] protected float m_TracePlayerSpeed;
+    public float TracePlayerSpeed
     {
-        get { return m_TraceSpeed; }
+        get { return m_TracePlayerSpeed; }
     }
 
     [SerializeField] protected float m_PatrolDetectRange = 10f;
@@ -58,7 +59,7 @@ public abstract class Enemy : MonoBehaviour
         get { return m_PatrolDetectAngle; }
     }
 
-    [SerializeField] protected float m_AlertDetectAngle = 90f;
+    [SerializeField] protected float m_AlertDetectAngle = 270f;
     public float AlertDetectAngle
     {
         get { return m_AlertDetectAngle; }
@@ -95,7 +96,8 @@ public abstract class Enemy : MonoBehaviour
     {
         Patrol = 0,
         Alert,
-        Trace,
+        TracePlayer,
+        TraceLight,
         Attack,
 
         Length
@@ -145,8 +147,8 @@ public abstract class Enemy : MonoBehaviour
     }
 
     public abstract void SetPatrol();
+    public abstract void SetTracePlayer();
     public abstract void SetAlert();
-    public abstract void SetTrace();
     public abstract void SetAttack();
 
 

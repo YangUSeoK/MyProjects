@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Trace_SoundMan : EnemyState
+public class Trace_Listener : EnemyState
 {
-    public Trace_SoundMan(Enemy _enemy) : base("Trace", _enemy) { }
+    public Trace_Listener(Enemy _enemy) : base("Trace", _enemy) { }
    
     public override void EnterState()
     {
@@ -25,6 +25,6 @@ public class Trace_SoundMan : EnemyState
     {
         Debug.Log("Trace 업뎃!");
         //if(공격사거리 안에 있다면 && 방향이 앞에 있다면)
-        m_Enemy.SetState((m_Enemy as Enemy_SightMan).Attack);
+        m_Enemy.SetState((m_Enemy as Enemy_Slaughter).Attack);
     }
 }
