@@ -19,25 +19,14 @@ public abstract class EnemyState
         m_Enemy = _enemy;
     }
 
-    protected FOVForPlayer m_FOVForPlayer;
-    public FOVForPlayer FOVForPlayer
+    protected FOV m_FOV;
+    public FOV FOV
     {
         set
         {
-            if (m_FOVForPlayer == null)
+            if (m_FOV == null)
             {
-                m_FOVForPlayer = value;
-            }
-        }
-    }
-    protected FOVForLight m_FOVForLight;
-    public FOVForLight FOVForLight
-    {
-        set
-        {
-            if (m_FOVForLight == null)
-            {
-                m_FOVForLight = value;
+                m_FOV = value;
             }
         }
     }

@@ -10,11 +10,12 @@ public class VolumeLight : MonoBehaviour
     private Light m_Light = null;
    
     // 20221115 양우석 : 좀비가 벽에 부딪힌 위치를 알기위해 만듬
-    private List<Vector3> m_WallPos = null;
-    public List<Vector3> WallPos
+    private List<Vector3> m_WallPosList = null;
+    public List<Vector3> WallPosList
     {
-        get { return m_WallPos; }
+        get { return m_WallPosList; }
     }
+    private List<Vector3> m_LightVertList = null;
 
     // 레이를 쪼개는 비율. 클수록 잘게 쪼갠다
     [SerializeField] private int m_SubDivision = 100;
@@ -32,6 +33,9 @@ public class VolumeLight : MonoBehaviour
         GetComponentInChildren<MeshFilter>().mesh = mLightMesh;
         m_MeshCollider = GetComponentInChildren<MeshCollider>();
         m_MeshCollider.sharedMesh = mLightMesh;
+
+        m_LightVertList = new List<Vector3>(3 * m_SubDivision);
+        m_WallPosList = new List<Vector3>(3 * m_SubDivision);
     }
 
     private void LateUpdate()
@@ -48,8 +52,8 @@ public class VolumeLight : MonoBehaviour
         Vector3 newCircleVert;
 
         // Vector3 = float x 3 =>         int * 3 * 기준원의 점 개수
-        List<Vector3> lightVertList = new List<Vector3>(3 * m_SubDivision);
-        m_WallPos.Clear();
+        m_LightVertList.Clear();
+        m_WallPosList.Clear();
         for (int i = 0; i < m_SubDivision; ++i)
         {
             float ratio = ((float)i) * n;            // 원을 비율로 나눔
@@ -72,10 +76,10 @@ public class VolumeLight : MonoBehaviour
             // 이제 각각의 점 위치를 향해 length 길이만큼 레이를 쏘면 된다. 
             Vector3 raycastPoint = SetRaycastPoint(newCircleVert, length);
 
-            lightVertList.Add(raycastPoint);
+            m_LightVertList.Add(raycastPoint);
         }
 
-        BuildMesh(lightVertList);
+        BuildMesh(m_LightVertList);
     }
 
 
@@ -132,7 +136,7 @@ public class VolumeLight : MonoBehaviour
         RaycastHit hitInfo;
         if (Physics.Raycast(transform.position, _dir, out hitInfo, _length))
         {
-            m_WallPos.Add(hitInfo.point);
+            m_WallPosList.Add(hitInfo.point);
             return hitInfo.point;
         }
         else

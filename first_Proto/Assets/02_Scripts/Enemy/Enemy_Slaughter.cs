@@ -46,8 +46,7 @@ public class Enemy_Slaughter : Enemy
     }
 
     // FOV
-    private FOVForPlayer m_FOVForPlayer = null;
-    private FOVForLight m_FOVForLight = null;
+    private FOV m_FOV = null;
 
 
    
@@ -61,8 +60,7 @@ public class Enemy_Slaughter : Enemy
         m_Alert = new Alert_Slaughter(this);
         m_Attack = new Attack(this);
 
-        m_FOVForPlayer = GetComponent<FOVForPlayer>();
-        m_FOVForLight = GetComponent<FOVForLight>();
+        m_FOV = GetComponent<FOV>();
     }
 
     protected override EnemyState GetInitialState()
@@ -72,8 +70,7 @@ public class Enemy_Slaughter : Enemy
 
     public override void SetPatrol()
     {
-        m_Patrol.FOVForPlayer = m_FOVForPlayer;
-        m_Patrol.FOVForLight = m_FOVForLight;
+        m_Patrol.FOV = m_FOV;
         m_Patrol.Agent = m_Agent;
         m_Patrol.MoveSpeed = m_PatrolSpeed;
         m_Patrol.Flags = m_FlagManager.Flags;
@@ -86,13 +83,13 @@ public class Enemy_Slaughter : Enemy
 
     public override void SetTracePlayer()
     {
-        m_Patrol.FOVForPlayer = m_FOVForPlayer;
-        m_TracePlayer.MoveSpeed = m_TraceSpeed;
+        m_Patrol.FOV = m_FOV;
+        m_TracePlayer.MoveSpeed = m_TracePlayerSpeed;
     }
 
     public override void SetAlert()
     {
-        m_Patrol.FOVForPlayer = m_FOVForPlayer;
+        m_Patrol.FOV = m_FOV;
         m_Alert.MoveSpeed = m_AlertSpeed;
     }
 

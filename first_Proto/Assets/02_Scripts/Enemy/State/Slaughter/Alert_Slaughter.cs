@@ -9,7 +9,6 @@ public class Alert_Slaughter : EnemyState
     public override void EnterState()
     {
         Debug.Log("Alert ¿‘¿Â!");
-        m_FOVForPlayer.SetFOV(m_Enemy.PlayerTr, m_Enemy.AlertDetectRange, m_Enemy.AlertDetectAngle);
     }
 
     public override void ExitState()

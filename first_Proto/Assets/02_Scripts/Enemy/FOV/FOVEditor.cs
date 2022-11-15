@@ -5,13 +5,13 @@ using UnityEditor;
 
 
 
-[CustomEditor(typeof(FOVForPlayer))]
+[CustomEditor(typeof(FOV))]
 public class FOVEditor : Editor
 {
     private void OnSceneGUI()
     {
         // target은 EnemyFOV에서 콜백함수로 받아옴
-        FOVForPlayer fov = (FOVForPlayer)target;
+        FOV fov = (FOV)target;
 
 
         // 하얀색 원을 그림.
@@ -22,7 +22,7 @@ public class FOVEditor : Editor
         Handles.color = new Color(1f, 1f, 1f, 0.2f);
 
         // enemyFOV에서 원 위의 한 점을 잡아서 부채꼴 시작점으로 지정
-        Vector3 fromAnglePos = fov.CirclePoint(-fov.m_Angle * 0.5f);
+        Vector3 fromAnglePos = fov.DirFromAngle(-fov.m_Angle * 0.5f);
 
         // 부채꼴 그림 -         각도 원점,             노말벡터,       시작점,      부채꼴 각도,    부채꼴 반지름
         Handles.DrawSolidArc(fov.transform.position, Vector3.up, fromAnglePos, fov.m_Angle, fov.m_Range);

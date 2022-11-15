@@ -9,7 +9,6 @@ public class TracePlayer_Slaughter : EnemyState
     public override void EnterState()
     {
         Debug.Log("TracePlayer ¿‘¿Â!");
-        m_FOVForPlayer.SetFOV(m_Enemy.PlayerTr, m_Enemy.TraceDetectRange, m_Enemy.TraceDetectAngle);
     }
 
     public override void ExitState()
