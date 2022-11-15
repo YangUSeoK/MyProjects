@@ -52,7 +52,7 @@ public class Patrol_SightMan : EnemyState
             {
                 mNextIdx -= m_Flags.Length;
             }
-            patrollFlags();
+            PatrollFlags();
         }
     }
 
@@ -75,7 +75,7 @@ public class Patrol_SightMan : EnemyState
         }
     }
 
-    public void patrollFlags()
+    public void PatrollFlags()
     {
         // 경로 계산중일 때는 리턴
         if (m_Agent.isPathStale)
