@@ -28,7 +28,7 @@ public class Trace_SightMan : EnemyState
         float dist = Vector3.Distance(m_Enemy.PlayerTr.position, m_Enemy.transform.position);
         if (m_Enemy.AttackRange <= dist)  // 공격사거리 안쪽이라면 + 부채꼴 범위안에 있다면
         {  
-            m_Enemy.SetState(((Enemy_SightMan)m_Enemy).Attack);
+            m_Enemy.SetState((m_Enemy as Enemy_SightMan).Attack);
         }
         else
         {
