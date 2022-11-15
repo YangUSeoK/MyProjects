@@ -103,6 +103,7 @@ public class FOV : MonoBehaviour
         return isInDirectFOV;
     }
 
+    // 맞은놈의 트랜스폼 반환용 오버라이드
     public bool IsInFovWithRayCheckDirect(float _detectRange, float _angle, string _tag, ref Vector3 _collPos, ref Transform _flash)
     {
         bool isInDirectFOV = false;
