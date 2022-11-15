@@ -29,13 +29,13 @@ public abstract class Enemy : MonoBehaviour
         get { return m_TracePlayerSpeed; }
     }
 
-    [SerializeField] protected float m_PatrolDetectRange = 10f;
+    [SerializeField] protected float m_PatrolDetectRange = 20f;
     public float PatrolDetectRange
     {
         get { return m_PatrolDetectRange; }
     }
 
-    [SerializeField] protected float m_PatrolPlayerDetectRange = 3f;
+    [SerializeField] protected float m_PatrolPlayerDetectRange = 10f;
     public float PatrolPlayerDetectRange
     {
         get { return m_PatrolPlayerDetectRange; }

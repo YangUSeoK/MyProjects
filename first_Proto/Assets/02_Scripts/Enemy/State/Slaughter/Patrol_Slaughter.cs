@@ -15,8 +15,11 @@ public class Patrol_Slaughter : EnemyState
     {
         set { m_Flags = value; }
     }
-
     private int mNextIdx = 0;
+
+    private Vector3 m_LightPos = Vector3.zero;
+    private Transform m_FlashTr = null;
+
 
     public override void EnterState()
     {
@@ -36,7 +39,6 @@ public class Patrol_Slaughter : EnemyState
 
     public override void Action()
     {
-        Debug.Log("Patrol 액션!");
         // 다음 갈 곳 계산
         if (m_Agent.remainingDistance <= 0.5f)
         {
@@ -52,7 +54,6 @@ public class Patrol_Slaughter : EnemyState
 
     public override void CheckState()
     {
-        Debug.Log("Patrol CheckState!");
         float dist = Vector3.Distance(m_Enemy.PlayerTr.position, m_Enemy.transform.position);
 
         // 플레이어가 범위안에 들어왔으면
@@ -65,10 +66,10 @@ public class Patrol_Slaughter : EnemyState
 
         // 빛이 범위안에 들어왔으면
         // 어차피 두번 검사해야하는거니까 else if 안써도 같다.
-        Vector3 lightPos = Vector3.zero;
-        if (m_FOV.IsInDirectFovWithRay(m_Enemy.PatrolDetectRange, m_Enemy.PatrolDetectAngle, LayerMask.NameToLayer("LIGHT"), ref lightPos)) 
+        if (m_FOV.IsInFovWithRayCheckDirect(m_Enemy.PatrolDetectRange, m_Enemy.PatrolDetectAngle, "LIGHT", ref m_LightPos, ref m_FlashTr)) 
         {
-            m_Enemy.SetState((m_Enemy as Enemy_Slaughter).TraceLight);
+            (m_Enemy as Enemy_Slaughter).SetPatrolToTraceLight(m_FlashTr, m_LightPos);
+            (m_Enemy as Enemy_Slaughter).SetState((m_Enemy as Enemy_Slaughter).TraceLight);
             return;
         }
     }

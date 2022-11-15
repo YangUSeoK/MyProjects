@@ -38,16 +38,16 @@ public class Enemy_Slaughter : Enemy
     }
     #endregion
 
-    private Transform m_LightTr = null;
-    public Transform LightTr
+    private Transform m_FlashTr = null;
+    public Transform FlashTr
     {
-        get { return m_LightTr; }
-        set { m_LightTr = value; }
+        get { return m_FlashTr; }
+        set { m_FlashTr = value; }
     }
 
     // FOV
     private FOV m_FOV = null;
-
+    private Vector3 m_LightPos = Vector3.zero;
 
    
 
@@ -78,12 +78,17 @@ public class Enemy_Slaughter : Enemy
 
     public void SetTraceLight()
     {
-
+        m_TraceLight.FOV = m_FOV;
+        m_TraceLight.Agent = m_Agent;
+        m_TraceLight.MoveSpeed = m_PatrolSpeed;
+        m_TraceLight.LightPos = m_LightPos;
+        m_TraceLight.FlashTr = m_FlashTr;
     }
 
     public override void SetTracePlayer()
     {
-        m_Patrol.FOV = m_FOV;
+        m_TracePlayer.FOV = m_FOV;
+        m_TracePlayer.Agent = m_Agent;
         m_TracePlayer.MoveSpeed = m_TracePlayerSpeed;
     }
 
@@ -96,4 +101,15 @@ public class Enemy_Slaughter : Enemy
     public override void SetAttack()
     {
     }
+
+    public void SetPatrolToTraceLight(Transform _flashTr, Vector3 _lightPos)
+    {
+        m_FlashTr = _flashTr;
+        m_LightPos = _lightPos;
+    }
+    
+    public void SetTraceLightToTracePlayer(Vector3 _playerPos)
+    {
+    }
+
 }

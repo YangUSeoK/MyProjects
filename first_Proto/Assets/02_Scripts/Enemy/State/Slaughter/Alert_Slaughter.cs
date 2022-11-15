@@ -24,16 +24,16 @@ public class Alert_Slaughter : EnemyState
     public override void CheckState()
     {
         Debug.Log("Alert 업뎃!");
-        float dist = Vector3.Distance(m_Enemy.PlayerTr.position, m_Enemy.transform.position);
-        if (dist <= m_Enemy.PatrolPlayerDetectRange)
-        {
-            m_Enemy.SetState((m_Enemy as Enemy_Slaughter).TracePlayer);
-        }
-        else
-        {
-            // 5초 지나면 
-            //m_Enemy.SetState(((Enemy_SightMan)m_Enemy).Patrol);
-        }
+        //float dist = Vector3.Distance(m_Enemy.PlayerTr.position, m_Enemy.transform.position);
+        //if (dist <= m_Enemy.PatrolPlayerDetectRange)
+        //{
+        //    m_Enemy.SetState((m_Enemy as Enemy_Slaughter).TracePlayer);
+        //}
+        //else
+        //{
+        //    // 5초 지나면 
+        //    //m_Enemy.SetState(((Enemy_SightMan)m_Enemy).Patrol);
+        //}
     }
 
     private IEnumerator AggroCheckCoroutine()

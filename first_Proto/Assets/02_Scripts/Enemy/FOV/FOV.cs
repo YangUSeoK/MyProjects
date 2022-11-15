@@ -12,16 +12,28 @@ public class FOV : MonoBehaviour
 
     protected Transform m_TargetTr = null;
     protected int m_PlayerLayer = 0;
+    public int PlayerLayer
+    {
+        get { return m_PlayerLayer; }
+    }
     protected int m_ObstacleLayer = 0;
+    public int ObstacleLayer
+    {
+        get { return m_ObstacleLayer; }
+    }
     private int m_LightLayer = 0;
     protected int m_LayerMask = 0;
+    public int mLayerMask
+    {
+        get { return m_LayerMask; }
+    }
 
     protected virtual void Start()
     {
-        m_PlayerLayer = LayerMask.NameToLayer("PLAYER");
-        m_ObstacleLayer = LayerMask.NameToLayer("OBSTACLE");
-        m_LightLayer = LayerMask.NameToLayer("LIGHT");
-        m_LayerMask = (1 << m_PlayerLayer) | (1 << m_ObstacleLayer) | (1 << m_LightLayer);
+        m_PlayerLayer = 1 << LayerMask.NameToLayer("PLAYER");
+        m_ObstacleLayer = 1 << LayerMask.NameToLayer("OBSTACLE");
+        m_LightLayer = 1 << LayerMask.NameToLayer("LIGHT");
+        m_LayerMask = ~((1 << m_PlayerLayer) | (1 << m_ObstacleLayer) | (1 << m_LightLayer));
     }
 
     public bool IsInFOV(float _detectRange, float _angle, int _layerMask)
@@ -54,20 +66,44 @@ public class FOV : MonoBehaviour
         RaycastHit hitInfo;
         Vector3 dir = (_targetTr.position - transform.position).normalized;
 
-        Debug.Log("레이 쏘는중");
-
         // 20221114 양우석 : 레이쏘는 위치 좀비에따라 보정해야 함
         if (Physics.Raycast(transform.position + transform.forward, dir, out hitInfo, _detectRange, m_LayerMask))
         {
             isLook = hitInfo.collider.tag == _targetTr.tag;
-
-            if (isLook) Debug.Log("레이 맞았음!");
         }
         return isLook;
     }
 
     // 부채꼴로 레이를 쏴서 부딪히면 위치를 저장한다.
-    public bool IsInDirectFovWithRay(float _detectRange, float _angle, int _layerMask, ref Vector3 _collPos)
+    public bool IsInFovWithRayCheckDirect(float _detectRange, float _angle, string _tag, ref Vector3 _collPos)
+    {
+        bool isInDirectFOV = false;
+        int stepCnt = 20;
+        float stepAngleSize = _angle / stepCnt;
+
+        for (int i = 0; i <= stepCnt; ++i)
+        {
+            float rayAngle = ((_angle / 2) + (stepAngleSize * i)) - _angle;
+            Vector3 dir = DirFromAngle(rayAngle);
+
+            Debug.DrawLine(transform.position, transform.position + (dir * _detectRange), Color.green);
+
+
+            RaycastHit hitInfo;
+            if (Physics.Raycast(transform.position, dir, out hitInfo, _detectRange, m_LayerMask))
+            {
+                isInDirectFOV = hitInfo.collider.CompareTag(_tag);
+                if (isInDirectFOV)
+                {
+                    _collPos = hitInfo.point;
+                    break;
+                }
+            }
+        }
+        return isInDirectFOV;
+    }
+
+    public bool IsInFovWithRayCheckDirect(float _detectRange, float _angle, string _tag, ref Vector3 _collPos, ref Transform _flash)
     {
         bool isInDirectFOV = false;
         int stepCnt = 20;
@@ -84,20 +120,17 @@ public class FOV : MonoBehaviour
             RaycastHit hitInfo;
             if (Physics.Raycast(transform.position, dir, out hitInfo, _detectRange, m_LayerMask))
             {
-                Debug.Log("좀비가 부채꼴 레이를 쏜다");
-
-                isInDirectFOV = hitInfo.collider.CompareTag("LIGHT");
+                isInDirectFOV = hitInfo.collider.CompareTag(_tag);
                 if (isInDirectFOV)
                 {
-                    Debug.Log("좀비가 빛을 발견했다!");
                     _collPos = hitInfo.point;
+                    _flash = hitInfo.transform;
                     break;
                 }
             }
         }
         return isInDirectFOV;
     }
-
 
     public Vector3 DirFromAngle(float _angleDegree)
     {
@@ -114,7 +147,7 @@ public class FOV : MonoBehaviour
         _angleDegree += transform.eulerAngles.y;
         _verticalAngleDegree += transform.eulerAngles.x;
 
-        // 20221108 양우석 : 해결했음.
+        // 20221108 양우석 : 3차원 벡터 완료.
         return new Vector3(Mathf.Cos((-_angleDegree + 90f) * Mathf.Deg2Rad),
                             Mathf.Tan(-_verticalAngleDegree * Mathf.Deg2Rad),
                             Mathf.Sin((-_angleDegree + 90f) * Mathf.Deg2Rad)).normalized;
