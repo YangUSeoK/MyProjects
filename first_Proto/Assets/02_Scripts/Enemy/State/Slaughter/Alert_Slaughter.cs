@@ -15,6 +15,7 @@ public class Alert_Slaughter : EnemyState
         Debug.Log("Alert 입장!");
         Debug.Log("좀비가 주위를 살핍니다.");
         m_Enemy.SetAlert();
+        m_Timer = 0f;
     }
 
     public override void ExitState()
@@ -63,6 +64,6 @@ public class Alert_Slaughter : EnemyState
         {
             (m_Enemy as Enemy_Slaughter).SetState((m_Enemy as Enemy_Slaughter).Patrol);
         }
-        Debug.Log(m_Timer);
+        Debug.Log($"Alert : {m_Timer}");
     }
 }

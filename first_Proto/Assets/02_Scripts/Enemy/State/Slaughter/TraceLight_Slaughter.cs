@@ -45,8 +45,6 @@ public class TraceLight_Slaughter : EnemyState
         // 탐지범위 안이라면
         if (Physics.Raycast(m_Enemy.transform.position, m_FlashTr.position - m_Enemy.transform.position,
             out hitInfo, m_Enemy.TraceDetectRange + 30f, layerMask))
-
-            Debug.Log(hitInfo.transform.name);
         {
             // 가로막는게 없고 플레이어가 손전등을 들고있다면 => TracePlayer
             // 20221116 양우석:  플레이어랑 거리 실제로 맞춰보고 수정해야 함.
@@ -57,17 +55,10 @@ public class TraceLight_Slaughter : EnemyState
                 m_Enemy.SetState((m_Enemy as Enemy_Slaughter).TracePlayer);
                 return;
             }
-
-            //else
-            //{
-            //    Debug.Log("아무것도 없나?");
-            //    m_Enemy.SetState((m_Enemy as Enemy_Slaughter).Alert);
-
-            //    return;
-            //}
         }
 
         Debug.DrawLine(m_Enemy.transform.position, m_LightPos, Color.blue);
+
         // 레이가 안맞았고 마지막 빛 위치랑 현재 위치가 같으면  => Alert
         if (Vector3.Distance(new Vector3(m_LightPos.x, m_Enemy.transform.position.y, m_LightPos.z), m_Enemy.transform.position) <= 0.3f)
         {
