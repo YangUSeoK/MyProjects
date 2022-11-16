@@ -21,7 +21,16 @@ public class FOV : MonoBehaviour
     {
         get { return m_ObstacleLayer; }
     }
-    private int m_LightLayer = 0;
+    protected int m_LightLayer = 0;
+    public int LightLayer
+    {
+        get { return m_LightLayer; }
+    }
+    protected int m_FlashLayer = 0;
+    public int FlashLayer
+    {
+        get { return m_FlashLayer; }
+    }
     protected int m_LayerMask = 0;
     public int mLayerMask
     {
@@ -33,7 +42,9 @@ public class FOV : MonoBehaviour
         m_PlayerLayer = 1 << LayerMask.NameToLayer("PLAYER");
         m_ObstacleLayer = 1 << LayerMask.NameToLayer("OBSTACLE");
         m_LightLayer = 1 << LayerMask.NameToLayer("LIGHT");
-        m_LayerMask = ~((1 << m_PlayerLayer) | (1 << m_ObstacleLayer) | (1 << m_LightLayer));
+        m_FlashLayer = 1 << LayerMask.NameToLayer("FLASH");
+
+        m_LayerMask = ~((1 << m_PlayerLayer) | (1 << m_ObstacleLayer) | (1 << m_LightLayer) | (1<<m_FlashLayer));
     }
 
     public bool IsInFOV(float _detectRange, float _angle, int _layerMask)
@@ -75,7 +86,7 @@ public class FOV : MonoBehaviour
     }
 
     // 부채꼴로 레이를 쏴서 부딪히면 위치를 저장한다.
-    public bool IsInFovWithRayCheckDirect(float _detectRange, float _angle, string _tag, ref Vector3 _collPos)
+    public bool IsInFovWithRayCheckDirect(float _detectRange, float _angle, string _tag, int _layerMask, ref Vector3 _collPos)
     {
         bool isInDirectFOV = false;
         int stepCnt = 20;
@@ -89,8 +100,8 @@ public class FOV : MonoBehaviour
             Debug.DrawLine(transform.position, transform.position + (dir * _detectRange), Color.green);
 
 
-            RaycastHit hitInfo;
-            if (Physics.Raycast(transform.position, dir, out hitInfo, _detectRange, m_LayerMask))
+            RaycastHit hitInfo;                     // 높이보정 offset
+            if (Physics.Raycast(transform.position + (Vector3.up * 0.5f), dir, out hitInfo, _detectRange, _layerMask))
             {
                 isInDirectFOV = hitInfo.collider.CompareTag(_tag);
                 if (isInDirectFOV)
@@ -104,22 +115,22 @@ public class FOV : MonoBehaviour
     }
 
     // 맞은놈의 트랜스폼 반환용 오버라이드
-    public bool IsInFovWithRayCheckDirect(float _detectRange, float _angle, string _tag, ref Vector3 _collPos, ref Transform _flash)
+    public bool IsInFovWithRayCheckDirect(float _detectRange, float _angle, string _tag, int _layerMask, ref Vector3 _collPos, ref Transform _flash)
     {
         bool isInDirectFOV = false;
-        int stepCnt = 20;
+        int stepCnt = 30;
         float stepAngleSize = _angle / stepCnt;
 
         for (int i = 0; i <= stepCnt; ++i)
         {
-            float rayAngle = ((_angle / 2) + (stepAngleSize * i)) - _angle ;
+            float rayAngle = ((_angle / 2) + (stepAngleSize * i)) - _angle;
             Vector3 dir = DirFromAngle(rayAngle);
 
             Debug.DrawLine(transform.position, transform.position + (dir * _detectRange), Color.green);
 
 
-            RaycastHit hitInfo;
-            if (Physics.Raycast(transform.position, dir, out hitInfo, _detectRange, m_LayerMask))
+            RaycastHit hitInfo;                     // 높이보정 offset
+            if (Physics.Raycast(transform.position + (Vector3.up * 0.5f), dir, out hitInfo, _detectRange, _layerMask))
             {
                 isInDirectFOV = hitInfo.collider.CompareTag(_tag);
                 if (isInDirectFOV)

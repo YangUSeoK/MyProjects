@@ -90,11 +90,13 @@ public class Enemy_Slaughter : Enemy
         m_TracePlayer.FOV = m_FOV;
         m_TracePlayer.Agent = m_Agent;
         m_TracePlayer.MoveSpeed = m_TracePlayerSpeed;
+        m_TracePlayer.PlayerPos = m_PlayerTr.position;
     }
 
     public override void SetAlert()
     {
-        m_Patrol.FOV = m_FOV;
+        m_Alert.FOV = m_FOV;
+        m_Alert.Agent = m_Agent;
         m_Alert.MoveSpeed = m_AlertSpeed;
     }
 
@@ -102,7 +104,7 @@ public class Enemy_Slaughter : Enemy
     {
     }
 
-    public void SetPatrolToTraceLight(Transform _flashTr, Vector3 _lightPos)
+    public void SetToTraceLight(Transform _flashTr, Vector3 _lightPos)
     {
         m_FlashTr = _flashTr;
         m_LightPos = _lightPos;

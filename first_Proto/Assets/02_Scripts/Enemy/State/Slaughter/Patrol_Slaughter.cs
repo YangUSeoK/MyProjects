@@ -60,15 +60,18 @@ public class Patrol_Slaughter : EnemyState
         if (m_FOV.IsInFOV(m_Enemy.PatrolPlayerDetectRange, m_Enemy.PatrolDetectAngle, LayerMask.NameToLayer("PLAYER"))
             && m_FOV.IsLookDirect(m_Enemy.PlayerTr, m_Enemy.PatrolPlayerDetectRange, LayerMask.NameToLayer("PLAYER")))
         {
+            Debug.Log("인간이다!!");
             m_Enemy.SetState((m_Enemy as Enemy_Slaughter).TracePlayer);
             return;
         }
 
         // 빛이 범위안에 들어왔으면
         // 어차피 두번 검사해야하는거니까 else if 안써도 같다.
-        if (m_FOV.IsInFovWithRayCheckDirect(m_Enemy.PatrolDetectRange, m_Enemy.PatrolDetectAngle, "LIGHT", ref m_LightPos, ref m_FlashTr)) 
+        if (m_FOV.IsInFovWithRayCheckDirect(m_Enemy.PatrolDetectRange, m_Enemy.PatrolDetectAngle,
+            "LIGHT", m_FOV.mLayerMask, ref m_LightPos, ref m_FlashTr)) 
         {
-            (m_Enemy as Enemy_Slaughter).SetPatrolToTraceLight(m_FlashTr, m_LightPos);
+            Debug.Log("빛이다!! 누가 있나?");
+            (m_Enemy as Enemy_Slaughter).SetToTraceLight(m_FlashTr, m_LightPos);
             (m_Enemy as Enemy_Slaughter).SetState((m_Enemy as Enemy_Slaughter).TraceLight);
             return;
         }

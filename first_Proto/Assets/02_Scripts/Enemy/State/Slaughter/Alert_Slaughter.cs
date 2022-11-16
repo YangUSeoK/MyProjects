@@ -6,9 +6,15 @@ public class Alert_Slaughter : EnemyState
 {
     public Alert_Slaughter(Enemy _enemy) : base("Alert", _enemy) { }
 
+    private Vector3 m_LightPos = Vector3.zero;
+    private Transform m_FlashTr = null;
+    private float m_Timer = 0f;
+
     public override void EnterState()
     {
         Debug.Log("Alert 입장!");
+        Debug.Log("좀비가 주위를 살핍니다.");
+        m_Enemy.SetAlert();
     }
 
     public override void ExitState()
@@ -18,26 +24,45 @@ public class Alert_Slaughter : EnemyState
 
     public override void Action()
     {
-        Debug.Log("Alert 물리업뎃!");
+
     }
 
     public override void CheckState()
     {
-        Debug.Log("Alert 업뎃!");
-        //float dist = Vector3.Distance(m_Enemy.PlayerTr.position, m_Enemy.transform.position);
-        //if (dist <= m_Enemy.PatrolPlayerDetectRange)
-        //{
-        //    m_Enemy.SetState((m_Enemy as Enemy_Slaughter).TracePlayer);
-        //}
-        //else
-        //{
-        //    // 5초 지나면 
-        //    //m_Enemy.SetState(((Enemy_SightMan)m_Enemy).Patrol);
-        //}
+        float dist = Vector3.Distance(m_Enemy.PlayerTr.position, m_Enemy.transform.position);
+
+        // 플레이어가 범위안에 들어왔으면
+        if (m_FOV.IsInFOV(m_Enemy.AlertDetectRange, m_Enemy.AlertDetectAngle, LayerMask.NameToLayer("PLAYER"))
+            && m_FOV.IsLookDirect(m_Enemy.PlayerTr, m_Enemy.PatrolPlayerDetectRange, LayerMask.NameToLayer("PLAYER")))
+        {
+            Debug.Log("거기 있었구나!");
+
+            m_Enemy.SetState((m_Enemy as Enemy_Slaughter).TracePlayer);
+            m_Timer = 0f;
+            return;
+        }
+
+        // 빛이 범위안에 들어왔으면
+        if (m_FOV.IsInFovWithRayCheckDirect(m_Enemy.AlertDetectRange, m_Enemy.AlertDetectAngle, 
+            "LIGHT", m_FOV.mLayerMask, ref m_LightPos, ref m_FlashTr))
+        {
+            Debug.Log("빛을 따라간다..");
+            (m_Enemy as Enemy_Slaughter).SetToTraceLight(m_FlashTr, m_LightPos);
+            (m_Enemy as Enemy_Slaughter).SetState((m_Enemy as Enemy_Slaughter).TraceLight);
+            m_Timer = 0f;
+            return;
+        }
+        
+        AggroCheck();
     }
 
-    private IEnumerator AggroCheckCoroutine()
+    private void AggroCheck()
     {
-        yield return null;
+        m_Timer += Time.deltaTime;
+        if (m_Timer >= 10f)
+        {
+            (m_Enemy as Enemy_Slaughter).SetState((m_Enemy as Enemy_Slaughter).Patrol);
+        }
+        Debug.Log(m_Timer);
     }
 }

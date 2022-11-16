@@ -9,7 +9,7 @@ public abstract class Enemy : MonoBehaviour
 
 
     #region Enemy_Member_variable
-
+    [Header("Speed")]
     [SerializeField] protected float m_PatrolSpeed;
     public float PatrolSpeed
     {
@@ -22,13 +22,14 @@ public abstract class Enemy : MonoBehaviour
         get { return m_AlertSpeed; }
     }
 
-
     [SerializeField] protected float m_TracePlayerSpeed;
     public float TracePlayerSpeed
     {
         get { return m_TracePlayerSpeed; }
     }
 
+    [Space]
+    [Header("Range")]
     [SerializeField] protected float m_PatrolDetectRange = 20f;
     public float PatrolDetectRange
     {
@@ -53,6 +54,14 @@ public abstract class Enemy : MonoBehaviour
         get { return m_TraceDetectRange; }
     }
 
+    [SerializeField] protected float m_AttackRange = 1f;
+    public float AttackRange
+    {
+        get { return m_AttackRange; }
+    }
+
+    [Space]
+    [Header("Detect Angle")]
     [SerializeField] protected float m_PatrolDetectAngle = 120f;
     public float PatrolDetectAngle
     {
@@ -71,12 +80,9 @@ public abstract class Enemy : MonoBehaviour
         get { return m_TraceDetectAngle; }
     }
 
-    protected float m_AttackRange = 1f;
-    public float AttackRange
-    {
-        get { return m_AttackRange; }
-    }
 
+    [Space]
+    [Header ("EX")]
     [SerializeField] protected Transform m_PlayerTr = null; // EnemyManager가 생성할때 플레이어 먹이면 됨.
     public Transform PlayerTr
     {
@@ -88,6 +94,7 @@ public abstract class Enemy : MonoBehaviour
     {
         get { return m_Agent; }
     }
+
 
     #endregion
 
