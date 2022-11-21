@@ -5,14 +5,14 @@ using UnityEngine;
 
 public class TracePlayer_Slaughter : EnemyState
 {
+    public TracePlayer_Slaughter(Enemy _enemy) : base("TracePlayer", _enemy) { }
+    
     private Vector3 m_PlayerPos = Vector3.zero;
     public Vector3 PlayerPos
     {
         set { m_PlayerPos = value; }
     }
-    bool mbIsLookPlayer = false;
-
-    public TracePlayer_Slaughter(Enemy _enemy) : base("TracePlayer", _enemy) { }
+    private bool mbIsLookPlayer = false;
 
     private float m_Timer = 0f;
 

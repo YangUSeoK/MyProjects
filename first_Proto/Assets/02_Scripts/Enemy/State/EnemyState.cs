@@ -19,6 +19,16 @@ public abstract class EnemyState
         m_Enemy = _enemy;
     }
 
+    protected NavMeshAgent m_Agent;
+    public NavMeshAgent Agent
+    {
+        set { m_Agent = value; }
+    }
+    public float MoveSpeed
+    {
+        set { m_Agent.speed = value; }
+    }
+
     protected FOV m_FOV;
     public FOV FOV
     {
@@ -31,15 +41,6 @@ public abstract class EnemyState
         }
     }
 
-    protected NavMeshAgent m_Agent;
-    public NavMeshAgent Agent
-    {
-        set { m_Agent = value; }
-    }
-    public float MoveSpeed
-    {
-        set { m_Agent.speed = value; }
-    }
 
 
     public abstract void EnterState();
