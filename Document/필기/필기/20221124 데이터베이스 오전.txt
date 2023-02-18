@@ -1,0 +1,57 @@
+httpd-2.4.54.win64-VS17 폴더 안에
+Apache24 폴더를 C드라이브에 넣기
+
+Apache24 폴더 중 conf랑 htdocs 폴더가 중요하다.
+htdocs는 IP를 타고 들어왔을 때 공개되는 폴더임
+
+conf 폴더에 httpd.conf 메모장으로 열어서
+서버위치, 포트, 웹문서 저장위치, 서버네임 설정
+
+37번째 줄에 Define SRVROOT = 설치된 위치
+60번째 줄 Listen = 포트
+261번째 줄 DocumentRoot = 웹 문서 저장위치
+227번째 줄 ServerName = 서버네임. localhost:80 으로 수정 (로컬로 할거임)
+
+설정 다 하고나면
+시스템-고급시스템 설정 -> 고급 -> 아래쪽 환경변수
+아래쪽 시스템 변수에 Path 더블클릭
+C:\Apache24\bin 주소 추가
+
+cmd 관리자권한으로 실행
+httpd -k install  엔터
+service is successfully installed 문구 확인 
+httpd -k start 엔터
+
+인터넷에 localhost 들어가보면 It works! 나오면 정상
+httpd.conf 나 php.ini 수정하면 cmd에서 httpd -k restart 해줘야함
+
+
+
+
+서버 사이드 언어들
+ASP, PHP, JSP 등등이 있다
+PHP를 아파치 서버가 인식할 수 있도록 해줘야 함
+php
+
+
+PHP는 ;가 주석
+extension_dir = "c:/php8/ext" 로 수정
+
+다시 conf에 httpd.conf 파일 열어서
+<IfModule dir_module> 검색
+DirectoryIndex index.html 를 DirectoryIndex index.php index.html 로 수정
+띄워쓰기 주의
+
+httpd.conf 맨 아래에
+PHPIniDir "C:/php8"
+LoadModule php_module "C:/php8/php8apache2_4.dll"
+AddType application/x-httpd-php .html .php
+AddHandler application/x-httpd-php .php 
+작성
+
+
+htdocs 폴더에 test.txt 만들고 확장자 php로 수정
+
+htdocs에 phpMyAdmin 폴더를 넣기
+php.ini 에서 928줄 mbstring, 930줄 mysqli 주석 없애기
+restart 하고 localhost/phpMyAdmin/ 들어가보기
